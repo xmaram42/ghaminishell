@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "readline.h": "c",
+        "stdlib.h": "c",
+        "minishell.h": "c",
+        "libft.h": "c",
+        "random": "c",
+        "errno.h": "c",
+        "stdio.h": "c",
+        "iterator": "c"
+    }
+}
