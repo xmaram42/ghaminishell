@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:34:44 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/06 16:13:56 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/09 17:08:06 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ t_cmd *parser(t_token *tokens, t_data *data)
 			start_new_cmd(&cmds, &current);
 		else
 			process_token(current, &tokens, data);
+			if (!tokens)
+			break;
 		tokens = tokens->next;
 	}
 	return (cmds);

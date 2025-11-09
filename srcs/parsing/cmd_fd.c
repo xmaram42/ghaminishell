@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_fd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 10:52:46 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/06 17:44:03 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/09 17:07:29 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	syntax_error(t_data *data, const char *token)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
+	ft_putstr_fd((char *)token, 2);
+	ft_putstr_fd("'\n", 2);
+	data->exit_code = 258;
+}
 static int	open_redir_file(int type, char *name)
 {
 	int	fd;
@@ -60,7 +67,11 @@ void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
 	if (cmd->skip_cmd)
 		return ;
 	if (!tok->next || tok->next->type != TOK_CMD)
+	{
+		cmd->skip_cmd = true;
+		syntax_error(data, tok->next ? tok->next->str : "newline");
 		return ;
+	}
 	name = tok->next->str;
 	type = tok->type;
 	fd = open_target(type, name, data);
