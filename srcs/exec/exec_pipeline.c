@@ -6,11 +6,94 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/09 17:29:56 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:51:52 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+static bool	is_assignment_word(const char *word)
+{
+	int	i;
+
+	if (!word || !ft_strchr(word, '='))
+		return (false);
+	if (word[0] != '_' && !ft_isalpha((unsigned char)word[0]))
+		return (false);
+	i = 0;
+	while (word[i] && word[i] != '=')
+	{
+		if (!ft_isalnum((unsigned char)word[i]) && word[i] != '_')
+			return (false);
+		i++;
+	}
+	return (word[i] == '=');
+}
+
+static bool	apply_assignment(t_data *data, char *assignment)
+{
+	if (!export(assignment, &data->env))
+	{
+		data->exit_code = 1;
+		print_error(ERR_MALLOC);
+		return (false);
+	}
+	return (true);
+}
+
+static void	shift_arguments(char **argv, int skip)
+{
+	int	i;
+
+	i = 0;
+	while (argv[skip + i])
+	{
+		argv[i] = argv[skip + i];
+		i++;
+	}
+	argv[i] = NULL;
+}
+
+static bool	process_command_assignments(t_data *data, t_cmd *cmd)
+{
+	int	count;
+
+	if (!cmd->argv)
+		return (true);
+	count = 0;
+	while (cmd->argv[count] && is_assignment_word(cmd->argv[count]))
+	{
+		if (!apply_assignment(data, cmd->argv[count]))
+			return (false);
+		free(cmd->argv[count]);
+		cmd->argv[count] = NULL;
+		count++;
+	}
+	if (count == 0)
+		return (true);
+	shift_arguments(cmd->argv, count);
+	if (!cmd->argv[0])
+	{
+		cmd->skip_cmd = true;
+		data->exit_code = 0;
+	}
+	return (true);
+}
+
+static bool	prepare_assignments(t_data *data)
+{
+	t_cmd	*cmd;
+
+	cmd = data->cmds;
+	while (cmd)
+	{
+		if (!process_command_assignments(data, cmd))
+			return (false);
+		cmd = cmd->next;
+	}
+	return (true);
+}
 
 static void	parent_process(t_data *data, t_cmd *cmd, int *pip)
 {
@@ -112,7 +195,11 @@ bool	exec_pipeline(t_data *data)
 
 	if (!data->cmds)
 		return (true);
-		if (!data->cmds->next && data->cmds->argv
+		if (!prepare_assignments(data))
+		return (false);
+	if (!data->cmds->next && (!data->cmds->argv || !data->cmds->argv[0]))
+		return (true);
+	if (!data->cmds->next && data->cmds->argv
 			&& data->cmds->argv[0] && is_builtin(data->cmds->argv[0]))
 		return (launch_builtin(data, data->cmds));
 	cmd = data->cmds;
