@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/06 16:15:37 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/07 20:40:00 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ static bool	check_dir(char **path, char *cmd, t_data *data)
 	return (true);
 }
 
+static bool	set_cmd_error(t_data *data, int code)
+{
+	data->exit_code = code;
+	return (false);
+}
+
 static bool	cmd_exist(char **path, t_data *data, char *cmd)
 {
 	if (!ft_strchr(cmd, '/'))
@@ -38,17 +44,13 @@ static bool	cmd_exist(char **path, t_data *data, char *cmd)
 			return (false);
 	}
 	if (!(*path))
-	{
-		data->exit_code = 127;
-		return (false);
-	}
+		return (set_cmd_error(data, 127));
 	if (access((*path), X_OK))
 	{
 		perror(*path);
 		free(*path);
 		*path = NULL;
-		data->exit_code = 126;
-		return (false);
+		return (set_cmd_error(data, 126));
 	}
 	if (!check_dir(path, cmd, data))
 		return (false);
@@ -58,53 +60,51 @@ static bool	cmd_exist(char **path, t_data *data, char *cmd)
 static void	redirect_in_out(t_data *data, t_cmd *cmd, int *pip)
 {
 	(void)data;
-	close(pip[0]);
+	if (pip[0] >= 0)
+		close(pip[0]);
 	if (cmd->infile >= 0)
 	{
 		dup2(cmd->infile, 0);
 		close(cmd->infile);
+		cmd->infile = -1;
 	}
 	if (cmd->outfile >= 0)
 	{
 		dup2(cmd->outfile, 1);
 		close(cmd->outfile);
+		cmd->outfile = -1;
 	}
-	else if (cmd->next)
+	else if (cmd->next && pip[1] >= 0)
 		dup2(pip[1], 1);
-	close(pip[1]);
+	if (pip[1] >= 0)
+		close(pip[1]);
 }
 
-void    child_process(t_data *data, t_cmd *cmd, int *pip)
+void	child_process(t_data *data, t_cmd *cmd, int *pip)
 {
-    char    *path;
-    char    **env;
+	char	*path;
+	char	**env;
 
-    path = NULL;
-    setup_child_signals();
-
-    /* Always configure stdin/stdout first (redir + pipe) */
-    redirect_in_out(data, cmd, pip);
-
-    if (cmd->skip_cmd)
-        exit(1);
-
-    /* Builtins executed in child must now write to the (possibly dup'd) stdout */
-    if (is_builtin(cmd->argv[0]))
-    {
-        launch_builtin(data, cmd);
-        exit(data->exit_code);
-    }
-    /* External command */
-    if (cmd_exist(&path, data, cmd->argv[0]))
-    {
-        env = lst_to_arr(data->env);
-        if (!env)
-            exit(1);
-        execve(path, cmd->argv, env);
-        perror("minishell: execve");
-        free_array(env);
-    }
-    if (path)
-        free(path);
-    exit(data->exit_code);
+	path = NULL;
+	setup_child_signals();
+	redirect_in_out(data, cmd, pip);
+	if (cmd->skip_cmd)
+		exit(1);
+	if (is_builtin(cmd->argv[0]))
+	{
+		launch_builtin(data, cmd);
+		exit(data->exit_code);
+	}
+	if (cmd_exist(&path, data, cmd->argv[0]))
+	{
+		env = lst_to_arr(data->env);
+		if (!env)
+			exit(1);
+		execve(path, cmd->argv, env);
+		perror("minishell: execve");
+		free_array(env);
+	}
+	if (path)
+		free(path);
+	exit(data->exit_code);
 }
