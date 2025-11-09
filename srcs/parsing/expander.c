@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:08:58 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/12 16:19:37 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:18:55 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,42 +70,46 @@ static int	handle_dollar(char *w, int i,
 	return (i);
 }
 
-// Copies non-$ text into the result
-static int copy_plain_text(char *word, int *i, char **result)
-{
-	int start;
 
-	start = *i;
-	while (word[*i] && word[*i] != '$')
-		(*i)++;
-	if (start != *i) // only append if there's something
-	{
-		if (append_part(result, ft_substr(word, start, *i - start)) == -1)
-			return (-1);
-	}
-	return (0);
-}
 static char	*expand_loop(char *word, char **envp, int last_exit)
 {
 	char	*res;
 	int		i;
 	int		next;
+	bool	in_single;
 
 	res = ft_strdup("");
 	if (!res)
 		return (NULL);
 	i = 0;
+	in_single = false;
 	while (word[i])
 	{
-		if (word[i] == '$')
+		if (word[i] == SQ_MARKER)
+		{
+			in_single = !in_single;
+			i++;
+			continue ;
+		}
+		if (word[i] == DQ_MARKER)
+		{
+			i++;
+			continue ;
+		}
+		if (word[i] == '$' && !in_single)
 		{
 			next = handle_dollar(word, i, &res, envp, last_exit);
 			if (next == -1)
 				return (free(res), NULL);
 			i = next;
+			continue ;
 		}
-		else if (copy_plain_text(word, &i, &res) == -1)
-			return (free(res), NULL);
+		if (append_part(&res, ft_substr(word, i, 1)) == -1)
+		{
+			free(res);
+			return (NULL);
+		}
+		i++;
 	}
 	return (res);
 }

@@ -29,6 +29,9 @@ pid_t	g_signal_pid;
 # define TOK_APPEND    5
 # define TOK_HEREDOC   6
 
+/* ===================== QUOTE MARKERS ===================== */
+# define SQ_MARKER '\1'
+# define DQ_MARKER '\2'
 /* ===================== ERROR MESSAGES ===================== */
 # define ERR_MALLOC "Memory allocation failed\n"
 # define ERR_PIPE 	"Pipe creation failed\n"

@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/12 12:51:04 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:19:50 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char *wrap_with_marker(char *content, char marker)
+{
+	char	*wrapped;
+	size_t	len;
+
+	if (!content)
+		return (NULL);
+	len = ft_strlen(content);
+	wrapped = malloc(len + 3);
+	if (!wrapped)
+	{
+		free(content);
+		return (NULL);
+	}
+	wrapped[0] = marker;
+	if (len)
+		ft_memcpy(wrapped + 1, content, len);
+	wrapped[len + 1] = marker;
+	wrapped[len + 2] = '\0';
+	free(content);
+	return (wrapped);
+}
 
 int	append_part(char **word, char *part)
 {
@@ -57,6 +80,7 @@ int	handle_word(t_token **head, char *line, int i)
 	add_token_back(head, new_token(word, TOK_CMD));
 	return (i);
 }
+
 int get_quoted_str(char *line, int i, char **out)
 {
 	char 	quote;
@@ -70,6 +94,12 @@ int get_quoted_str(char *line, int i, char **out)
 	if (line[i] == '\0')
 		return (-1);
 	*out = ft_substr(line, start, i - start);
+	if (!*out)
+		return (-1);
+	if (quote == '\'')
+		*out = wrap_with_marker(*out, SQ_MARKER);
+	else
+		*out = wrap_with_marker(*out, DQ_MARKER);
 	if (!*out)
 		return (-1);
 	return (i + 1);
