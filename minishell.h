@@ -18,7 +18,7 @@
 # include <termios.h>
 
 /* ===================== GLOBAL VARIABLE ===================== */
-extern pid_t	g_signal_pid;
+pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
 # define TOK_CMD       0

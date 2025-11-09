@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/07 20:00:00 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/09 17:29:56 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ bool	exec_pipeline(t_data *data)
 
 	if (!data->cmds)
 		return (true);
-	if (!data->cmds->next && data->cmds->argv[0]
-		&& is_builtin(data->cmds->argv[0]))
+		if (!data->cmds->next && data->cmds->argv
+			&& data->cmds->argv[0] && is_builtin(data->cmds->argv[0]))
 		return (launch_builtin(data, data->cmds));
 	cmd = data->cmds;
 	last_pid = -1;

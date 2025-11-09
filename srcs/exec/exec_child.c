@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/07 20:40:00 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/09 17:28:41 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,15 @@ void	child_process(t_data *data, t_cmd *cmd, int *pip)
 	path = NULL;
 	setup_child_signals();
 	redirect_in_out(data, cmd, pip);
-	if (cmd->skip_cmd)
-		exit(1);
+	if (cmd->skip_cmd || !cmd->argv || !cmd->argv[0])
+	{
+		int status;
+
+		status = data->exit_code;
+		if (status == 0)
+			status = 1;
+		exit(status);
+	}
 	if (is_builtin(cmd->argv[0]))
 	{
 		launch_builtin(data, cmd);

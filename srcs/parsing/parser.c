@@ -6,7 +6,7 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:34:44 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/09 17:08:06 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:30:47 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ static void process_token(t_cmd *current, t_token **tokens, t_data *data)
 	else
 		pars_word(current, *tokens, data);
 }
-
-/* ======================= MAIN PARSER ======================= */
 t_cmd *parser(t_token *tokens, t_data *data)
 {
 	t_cmd *cmds;
@@ -69,9 +67,8 @@ t_cmd *parser(t_token *tokens, t_data *data)
 			start_new_cmd(&cmds, &current);
 		else
 			process_token(current, &tokens, data);
-			if (!tokens)
-			break;
-		tokens = tokens->next;
+		if (tokens)
+			tokens = tokens->next;
 	}
 	return (cmds);
 }
