@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/10/30 16:40:52 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/07 20:10:00 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static bool	read_heredoc_input(int fd, char *delimiter, t_data *data)
 			free(line);
 			break ;
 		}
-		// Expand variables in heredoc if needed
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
@@ -40,12 +39,17 @@ static bool	read_heredoc_input(int fd, char *delimiter, t_data *data)
 
 int	handle_heredoc(char *delimiter, t_data *data)
 {
-	int		fd;
+	int	fd;
 	char	*filename;
-	int		random_num;
+	int	random_num;
+	char	*suffix;
 
 	random_num = rand() % 10000;
-	filename = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(random_num));
+	suffix = ft_itoa(random_num);
+	if (!suffix)
+		return (-1);
+	filename = ft_strjoin("/tmp/minishell_heredoc_", suffix);
+	free(suffix);
 	if (!filename)
 		return (-1);
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
