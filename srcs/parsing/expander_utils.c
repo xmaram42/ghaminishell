@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:23:43 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/30 16:46:03 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/09 18:37:23 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,26 @@ char *find_env_value(char *key, char **envp)
 	}
 	return (NULL);
 }
-
 char	*extract_var_name(char *str, int start)
 {
 	int		i;
 	int		len;
 
 	i = start + 1;
-	if (str[i] == '?')
-		return (ft_strdup("?"));
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (ft_strdup("")); // invalid start like $1, $-
-	i++;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
+        if (str[i] == '?')
+                return (ft_strdup("?"));
+        if (ft_isdigit(str[i]))
+        {
+                while (str[i] && ft_isdigit(str[i]))
+                        i++;
+                len = i - (start + 1);
+                return (ft_substr(str, start + 1, len));
+        }
+        if (!ft_isalpha(str[i]) && str[i] != '_')
+                return (ft_strdup("")); // invalid start like $-, $@
+        i++;
+        while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+                i++;
 	len = i - (start + 1);
 	return (ft_substr(str, start + 1, len));
 }

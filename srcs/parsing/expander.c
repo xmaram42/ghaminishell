@@ -6,7 +6,7 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:08:58 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/09 18:18:55 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:36:58 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ static char	*get_var_value(char *n, char **envp, int last_exit)
 
 	if (n[0] == '?' && n[1] == '\0')
 		return (ft_itoa(last_exit));
-	if (!ft_isalpha(n[0]) && n[0] != '_')
-		return (ft_strjoin("$", n)); // literal, not expanded
+        if (ft_isdigit(n[0]))
+                return (ft_strdup(""));
+        if (!ft_isalpha(n[0]) && n[0] != '_')
+                return (ft_strjoin("$", n)); // literal, not expanded
 	v = find_env_value(n, envp);
 	if (v)
 		return (ft_strdup(v));
