@@ -10,10 +10,15 @@ bool	shell_parse_line(t_data *data, char *line)
 		data->exit_code = 2;
 		return (false);
 	}
-	tokens = lexer(line);
-	if (!tokens)
-		return (false);
-	data->token = tokens;
+		tokens = lexer(line);
+		if (!tokens)
+			return (false);
+		if (!validate_tokens(tokens, data))
+		{
+			free_token(&tokens);
+			return (false);
+		}
+		data->token = tokens;
 	data->cmds = parser(tokens, data);
 	if (!data->cmds)
 	{

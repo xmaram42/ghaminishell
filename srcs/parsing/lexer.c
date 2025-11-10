@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/02 17:46:10 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:27:21 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,13 @@
 /* handle operators */
 static int handle_pipe(t_token **head, char *line, int i)
 {
-	(void)*line;
-    add_token_back(head, new_token(ft_strdup("|"), TOK_PIPE));
-    return (i + 1);
+        if (line[i + 1] == '|')
+        {
+                add_token_back(head, new_token(ft_strdup("||"), TOK_PIPE));
+                return (i + 2);
+        }
+        add_token_back(head, new_token(ft_strdup("|"), TOK_PIPE));
+        return (i + 1);
 }
 
 static int handle_redir_in(t_token **head, char *line, int i)

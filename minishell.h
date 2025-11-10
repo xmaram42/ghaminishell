@@ -126,6 +126,7 @@ t_cmd	*new_cmd(void);
 void	add_cmd_back(t_cmd **lst, t_cmd *new);
 void	pars_word(t_cmd *cmd, t_token *tok, t_data *data);
 void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data);
+int		validate_tokens(t_token *tokens, t_data *data);
 
 // Expander
 char	*expand_value(char *word, char **envp, int last_exit);
