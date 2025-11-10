@@ -36,7 +36,7 @@ static bool	export_no_args(t_list *env)
 			printf("\n");
 		i++;
 	}
-	free(arr);
+	free_array(arr);
 	return (true);
 }
 
@@ -107,8 +107,13 @@ bool	export(char *str, t_list **env)
 		(*env)->str = value;
 	}
 	else if (pos == -1)
+	{
 		if (!append_to_list(env, value))
+		{
+			free(value);
 			return (false);
+		}
+	}
 	return (true);
 }
 

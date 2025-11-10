@@ -1,3 +1,4 @@
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -18,7 +19,7 @@
 # include <termios.h>
 
 /* ===================== GLOBAL VARIABLE ===================== */
-pid_t	g_signal_pid;
+extern pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
 # define TOK_CMD       0

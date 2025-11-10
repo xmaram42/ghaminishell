@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/09 18:17:52 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/10 15:55:45 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ static void	wait_all(t_data *data, pid_t last_pid)
 	int	status;
 	pid_t	pid;
 	int	last_status;
+	int signal_num;
 
 	last_status = 0;
 	while ((pid = waitpid(-1, &status, 0)) > 0)
@@ -154,7 +155,14 @@ static void	wait_all(t_data *data, pid_t last_pid)
 			if (WIFEXITED(status))
 				last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				last_status = 128 + WTERMSIG(status);
+			{
+				signal_num = WTERMSIG(status);
+				if (signal_num == SIGQUIT)
+					ft_putstr_fd("Quit: 3\n", STDOUT_FILENO);
+				else if (signal_num == SIGINT)
+					ft_putstr_fd("\n", STDOUT_FILENO);
+			}
+			last_status = 128 + WTERMSIG(status);
 		}
 	}
 	data->exit_code = last_status;
@@ -195,7 +203,7 @@ bool	exec_pipeline(t_data *data)
 
 	if (!data->cmds)
 		return (true);
-		if (!prepare_assignments(data))
+	if (!prepare_assignments(data))
 		return (false);
 	if (!data->cmds->next && (!data->cmds->argv || !data->cmds->argv[0]))
 		return (true);
