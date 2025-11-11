@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/05 16:41:04 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/10 18:30:00 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static char	*search_in_path(char *cmd, char **paths)
 {
 	char	full_path[1024];
-	int		i;
+	int	i;
 
 	i = 0;
 	while (paths[i])
@@ -34,20 +34,28 @@ static char	*get_paths(t_list *env)
 {
 	t_list	*tmp;
 
+	if (!env)
+		return (NULL);
 	tmp = env;
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->str, "PATH=", 5) == 0)
 			return (tmp->str + 5);
 		tmp = tmp->next;
+		if (!tmp || tmp == env)
+			break ;
 	}
 	return (NULL);
 }
 
-static char	*cmd_not_found(char *cmd)
+static char	*cmd_not_found(char *cmd, int path_missing)
 {
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
+	if (path_missing)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else
+		ft_putstr_fd(": command not found\n", 2);
 	return (NULL);
 }
 
@@ -61,11 +69,13 @@ char	*find_cmd(t_data *data, char *cmd)
 	{
 		if (access(cmd, X_OK) == 0)
 			return (ft_strdup(cmd));
-		return (cmd_not_found(cmd));
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd);
+		return (NULL);
 	}
 	path_str = get_paths(data->env);
 	if (!path_str)
-		return (cmd_not_found(cmd));
+		return (cmd_not_found(cmd, 1));
 	paths = ft_split(path_str, ':');
 	if (!paths)
 		return (NULL);
@@ -73,5 +83,5 @@ char	*find_cmd(t_data *data, char *cmd)
 	free_array(paths);
 	if (full_path)
 		return (full_path);
-	return (cmd_not_found(cmd));
+	return (cmd_not_found(cmd, 0));
 }

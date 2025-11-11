@@ -6,7 +6,7 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 10:52:46 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/09 17:30:36 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:30:00 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,72 @@ static void	apply_fd(t_cmd *cmd, int type, int fd)
 		cmd->outfile = fd;
 	}
 }
-void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
-{
-	int		fd;
-	char	*name;
-	int		type;
 
-	if (cmd->skip_cmd)
-		return ;
+static int	ensure_target_token(t_cmd *cmd, t_token *tok, t_data *data)
+{
 	if (!tok->next)
 	{
 		print_redir_error(cmd, data, NULL);
-		return ;
+		return (0);
 	}
 	if (tok->next->type != TOK_CMD)
 	{
 		print_redir_error(cmd, data, tok->next->str);
+		return (0);
+	}
+	return (1);
+}
+
+static char	**dup_envp_or_empty(t_data *data)
+{
+	if (!data->env)
+		return (ft_calloc(1, sizeof(char *)));
+	return (lst_to_arr(data->env));
+}
+
+static char	*expand_redir_word(t_token *tok, t_data *data, int type)
+{
+	char	**env_arr;
+	char	*expanded;
+
+	if (type == TOK_HEREDOC)
+		return (strip_markers(tok->str));
+	env_arr = dup_envp_or_empty(data);
+	if (!env_arr)
+	{
+		print_error(ERR_MALLOC);
+		data->exit_code = 1;
+		return (NULL);
+	}
+	expanded = expand_value(tok->str, env_arr, data->exit_code);
+	free_array(env_arr);
+	if (!expanded)
+	{
+		print_error(ERR_MALLOC);
+		data->exit_code = 1;
+	}
+	return (expanded);
+}
+
+void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
+{
+	int	fd;
+	char	*name;
+	int	type;
+
+	if (cmd->skip_cmd)
+		return ;
+	if (!ensure_target_token(cmd, tok, data))
+		return ;
+	type = tok->type;
+	name = expand_redir_word(tok->next, data, type);
+	if (!name)
+	{
+		cmd->skip_cmd = true;
 		return ;
 	}
-	name = tok->next->str;
-	type = tok->type;
 	fd = open_target(type, name, data);
+	free(name);
 	if (fd < 0)
 	{
 		cmd->skip_cmd = true;

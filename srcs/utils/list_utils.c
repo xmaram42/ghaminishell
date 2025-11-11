@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/04 14:25:01 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/11 19:55:02 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 void	free_list(t_list **list)
 {
-	t_list	*current;
-	t_list	*first;
+	t_list	*head;
+	t_list	*cur;
 	t_list	*next;
 
 	if (!list || !*list)
 		return ;
-	current = *list;
-	first = *list;
-	while (current)
+	head = *list;
+	cur = head;
+	while (cur)
 	{
-		next = current->next;
-		free(current->str);
-		free(current);
-		current = next;
-		if (current == first)
+		next = cur->next;
+		free(cur->str);
+		free(cur);
+		if (!next || next == head)
 			break ;
+		cur = next;
 	}
 	*list = NULL;
 }
@@ -39,7 +39,7 @@ by iterating through each node, freeing the string and then the node itself,
 then sets the original pointer to NULL
 */
 
-static	int	new_elem_to_string(t_list **new, char *elem)
+static int	new_elem_to_string(t_list **new, char *elem)
 {
 	(*new) = malloc(sizeof(t_list));
 	if (*new == NULL)
@@ -55,7 +55,7 @@ by allocating memory for it and initializing its fields
 returns 1 on success, 0 on failure
 */
 
-static	void	add_first_elem(t_list **list, t_list *new)
+static void	add_first_elem(t_list **list, t_list *new)
 {
 	(*list) = new;
 	(*list)->next = *list;
@@ -65,36 +65,32 @@ static	void	add_first_elem(t_list **list, t_list *new)
 this function adds the first element to an empty circular linked list
 */
 
-size_t list_length(t_list *list)
+size_t	list_length(t_list *list)
 {
 	t_list	*temp;
 	size_t	count;
 
 	if (list == NULL)
-		return(0);
-	if ((list))
+		return (0);
+	temp = list;
+	count = 1;
+	while (temp->next != list)
 	{
-		temp = list;
-		count = 1;
-		while (temp->next != list)
-		{
-			count++;
-			temp = temp->next;
-		}
-		return (count);
+		count++;
+		temp = temp->next;
 	}
-	return (0);
+	return (count);
 }
 /*
 this function counts the amount of elements
-in a circular linked list, the count starts by 1 because 
+in a circular linked list, the count starts by 1 because
 we start from the head of the list, so its not the same as i = 0;
 */
 
 int	append_to_list(t_list **list, char *elem)
 {
-	t_list *new;
-	
+	t_list	*new;
+
 	if (!new_elem_to_string(&new, elem))
 		return (0);
 	if (*list == NULL)
@@ -110,8 +106,8 @@ int	append_to_list(t_list **list, char *elem)
 }
 /*
 this function appends an element into a circular linked list
-in case there is no element, it calls new_elem_to_string and add_first_elem 
-to create the first element and adds it to the list, otherwise it 
-adjusts the pointers by moving the new element to the end of the list 
+in case there is no element, it calls new_elem_to_string and add_first_elem
+to create the first element and adds it to the list, otherwise it
+adjusts the pointers by moving the new element to the end of the list
 and linking it back to the head to maintain the circular structure
 */

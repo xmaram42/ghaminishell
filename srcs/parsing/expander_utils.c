@@ -12,7 +12,35 @@
 
 #include "minishell.h"
 
-char *find_env_value(char *key, char **envp)
+static int      is_marker(char c)
+{
+        return (c == SQ_MARKER || c == DQ_MARKER);
+}
+
+char    *strip_markers(const char *word)
+{
+        char    *clean;
+        size_t  i;
+        size_t  j;
+
+        if (!word)
+                return (NULL);
+        clean = malloc(ft_strlen(word) + 1);
+        if (!clean)
+                return (NULL);
+        i = 0;
+        j = 0;
+        while (word[i])
+        {
+                if (!is_marker(word[i]))
+                        clean[j++] = word[i];
+                i++;
+        }
+        clean[j] = '\0';
+        return (clean);
+}
+
+char    *find_env_value(char *key, char **envp)
 {
 	int i;
 	int len;
