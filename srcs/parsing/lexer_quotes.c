@@ -6,13 +6,33 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/09 18:19:50 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/11 22:40:00 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char *wrap_with_marker(char *content, char marker)
+static bool	is_plain_break(char c)
+{
+	if (c == ' ' || c == '\t')
+		return (true);
+	if (c == '|' || c == '<' || c == '>')
+		return (true);
+	if (c == '\'' || c == '\"')
+		return (true);
+	return (false);
+}
+
+static bool	is_word_stop(char c)
+{
+	if (c == ' ' || c == '\t')
+		return (true);
+	if (c == '|' || c == '<' || c == '>')
+		return (true);
+	return (false);
+}
+
+static char	*wrap_with_marker(char *content, char marker)
 {
 	char	*wrapped;
 	size_t	len;
@@ -41,7 +61,7 @@ int	append_part(char **word, char *part)
 
 	if (!part)
 		return (-1);
-	if (*part == '\0')  // 👈 skip if nothing to add
+	if (*part == '\0')
 	{
 		free(part);
 		return (0);
@@ -54,46 +74,60 @@ int	append_part(char **word, char *part)
 	*word = tmp;
 	return (0);
 }
-int	handle_word(t_token **head, char *line, int i)
+
+static int	read_plain_segment(char *line, int *index, char **part)
+{
+	int	start;
+
+	start = *index;
+	while (line[*index] && !is_plain_break(line[*index]))
+	{
+		*index = *index + 1;
+	}
+	*part = ft_substr(line, start, *index - start);
+	if (!*part)
+		return (-1);
+	return (0);
+}
+
+int	handle_word(t_token **head, char *line, int index)
 {
 	char	*word;
 	char	*part;
-	int		start;
 
 	word = ft_strdup("");
 	if (!word)
 		return (-1);
-	while (line[i] && !ft_strchr(" \t|<>", line[i]))
+	while (line[index] && !is_word_stop(line[index]))
 	{
-		if (line[i] == '\'' || line[i] == '"')
-			i = get_quoted_str(line, i, &part);
-		else
+		if (line[index] == '\'' || line[index] == '\"')
 		{
-			start = i;
-			while (line[i] && !ft_strchr(" \t|<>'\"", line[i]))
-				i++;
-			part = ft_substr(line, start, i - start);
+			index = get_quoted_str(line, index, &part);
+			if (index == -1)
+				return (free(word), -1);
 		}
-		if (i == -1 || append_part(&word, part) == -1)
+		else if (read_plain_segment(line, &index, &part) == -1)
+			return (free(word), -1);
+		if (append_part(&word, part) == -1)
 			return (free(word), -1);
 	}
 	add_token_back(head, new_token(word, TOK_CMD));
-	return (i);
+	return (index);
 }
 
-int get_quoted_str(char *line, int i, char **out)
+int	get_quoted_str(char *line, int index, char **out)
 {
-	char 	quote;
-	int 	start;
+	char	quote;
+	int	start;
 
-	quote = line[i];
-	i++;
-	start = i;
-	while (line[i] && line[i] != quote)
-		i++;
-	if (line[i] == '\0')
+	quote = line[index];
+	index = index + 1;
+	start = index;
+	while (line[index] && line[index] != quote)
+		index = index + 1;
+	if (line[index] == '\0')
 		return (-1);
-	*out = ft_substr(line, start, i - start);
+	*out = ft_substr(line, start, index - start);
 	if (!*out)
 		return (-1);
 	if (quote == '\'')
@@ -102,22 +136,25 @@ int get_quoted_str(char *line, int i, char **out)
 		*out = wrap_with_marker(*out, DQ_MARKER);
 	if (!*out)
 		return (-1);
-	return (i + 1);
+	return (index + 1);
 }
+
 int	has_unclosed_quote(const char *line)
 {
-	int		i;
+	int	index;
 	char	quote;
 
-	i = 0;
+	index = 0;
 	quote = '\0';
-	while (line[i])
+	while (line[index])
 	{
-		if ((line[i] == '\'' || line[i] == '"') && !quote)
-			quote = line[i];
-		else if (line[i] == quote)
+		if ((line[index] == '\'' || line[index] == '\"') && !quote)
+			quote = line[index];
+		else if (line[index] == quote)
 			quote = '\0';
-		i++;
+		index = index + 1;
 	}
-	return (quote != '\0');
+	if (quote)
+		return (1);
+	return (0);
 }

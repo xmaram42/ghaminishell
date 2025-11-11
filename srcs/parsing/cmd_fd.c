@@ -32,12 +32,7 @@ static int	open_redir_file(int type, char *name)
 	if (type == TOK_REDIR_IN)
 		fd = open(name, O_RDONLY);
 	else if (type == TOK_REDIR_OUT)
-		fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (type == TOK_APPEND)
-		fd = open(name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		perror(name);
-	return (fd);
+		return (fd);
 }
 
 static int	open_target(int type, char *name, t_data *data)

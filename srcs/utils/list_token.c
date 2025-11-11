@@ -86,8 +86,3 @@ void	free_token(t_token **list)
 
 //Free the entire circular token list, including each token string.
 //Resets list pointer to NULL to avoid dangling reference.
-
-// void	free_everything(t_token **list, char **args)
-// {
-
-// }

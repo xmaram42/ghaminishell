@@ -135,6 +135,7 @@ char	*find_env_value(char *key, char **envp);
 char	*extract_var_name(char *str, int start);
 char	*expand_tilde(char *word, char **envp);
 char	*ft_free_first_str(char *s1, char *s2);
+char	*strip_markers(const char *word);
 
 
 // Input handling
