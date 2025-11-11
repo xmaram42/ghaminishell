@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/10 15:55:45 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/11 18:48:29 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static bool	process_command_assignments(t_data *data, t_cmd *cmd)
 	if (!cmd->argv[0])
 	{
 		cmd->skip_cmd = true;
-		data->exit_code = 0;
+		ms_set_exit_status(data, 0);
 	}
 	return (true);
 }
@@ -142,10 +142,10 @@ static bool	exec_cmd(t_data *data, t_cmd *cmd, int *pip, pid_t *out_pid)
 
 static void	wait_all(t_data *data, pid_t last_pid)
 {
-	int	status;
+	int		status;
 	pid_t	pid;
-	int	last_status;
-	int signal_num;
+	int		last_status;
+	int		signal_num;
 
 	last_status = 0;
 	while ((pid = waitpid(-1, &status, 0)) > 0)
@@ -161,12 +161,14 @@ static void	wait_all(t_data *data, pid_t last_pid)
 					ft_putstr_fd("Quit: 3\n", STDOUT_FILENO);
 				else if (signal_num == SIGINT)
 					ft_putstr_fd("\n", STDOUT_FILENO);
+				// only here we do 128 + signal
+				last_status = 128 + signal_num;
 			}
-			last_status = 128 + WTERMSIG(status);
 		}
 	}
-	data->exit_code = last_status;
+	ms_set_exit_status(data, last_status);
 }
+
 
 static bool	exec_iteration(t_data *data, t_cmd *cmd, pid_t *child_pid)
 {

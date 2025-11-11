@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:22:39 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/07 20:35:00 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/11 18:21:37 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,21 @@ static void	exec_builtin_dispatch(int *stdin_backup, int *stdout_backup,
 
 	command_name = command->argv[0];
 	if (strings_equal(command_name, "echo"))
-		shell->exit_code = builtin_echo(command);
+	    ms_set_exit_status(shell, builtin_echo(command));
 	else if (strings_equal(command_name, "cd"))
-		shell->exit_code = builtin_cd(shell, command);
+	    ms_set_exit_status(shell, builtin_cd(shell, command));
 	else if (strings_equal(command_name, "pwd"))
-		shell->exit_code = builtin_pwd();
+	    ms_set_exit_status(shell, builtin_pwd());
 	else if (strings_equal(command_name, "export"))
-		shell->exit_code = builtin_export(shell, command);
+	    ms_set_exit_status(shell, builtin_export(shell, command));
 	else if (strings_equal(command_name, "unset"))
-		shell->exit_code = builtin_unset(shell, command);
+	    ms_set_exit_status(shell, builtin_unset(shell, command));
 	else if (strings_equal(command_name, "env"))
-		shell->exit_code = builtin_env(shell);
+	    ms_set_exit_status(shell, builtin_env(shell));
 	else if (strings_equal(command_name, "clear"))
-		shell->exit_code = clear_builtin();
+		ms_set_exit_status(shell, clear_builtin());	
+	else if (strings_equal(command_name, "exit"))
+	    ft_exit(shell, command->argv);
 	else if (strings_equal(command_name, "exit"))
 	{
 		restore_stdio(stdin_backup, stdout_backup);
@@ -70,7 +72,7 @@ static bool	prepare_infile(t_cmd *command, int *stdin_backup, t_data *shell)
 		}
 		close(command->infile);
 		command->infile = -1;
-		shell->exit_code = 1;
+		ms_set_exit_status(shell, 1);
 		return (false);
 	}
 	close(command->infile);

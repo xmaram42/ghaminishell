@@ -7,7 +7,7 @@ bool	shell_parse_line(t_data *data, char *line)
 	if (has_unclosed_quote(line))
 	{
 		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
-		data->exit_code = 2;
+		ms_set_exit_status(data, 2);
 		return (false);
 	}
 		tokens = lexer(line);

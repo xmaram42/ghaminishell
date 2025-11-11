@@ -3,111 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 19:55:02 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/11 19:51:24 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_list(t_list **list)
+static t_list	*ms_new_env_node(char *s)
+{
+	t_list	*new;
+
+	new = (t_list *)malloc(sizeof(t_list));
+	if (new == NULL)
+		return (NULL);
+	new->str = s;
+	new->next = new;
+	new->prev = new;
+	return (new);
+}
+
+static void	ms_add_first_env(t_list **list, t_list *new)
+{
+	*list = new;
+	(*list)->next = *list;
+	(*list)->prev = *list;
+}
+
+int	append_to_list(t_list **list, char *s)
+{
+	t_list	*new;
+
+	new = ms_new_env_node(s);
+	if (new == NULL)
+		return (0);
+	if (*list == NULL)
+	{
+		ms_add_first_env(list, new);
+		return (1);
+	}
+	new->prev = (*list)->prev;
+	new->next = *list;
+	(*list)->prev->next = new;
+	(*list)->prev = new;
+	return (1);
+}
+
+int	list_length(t_list *list)
+{
+	t_list	*head;
+	int		len;
+
+	if (list == NULL)
+		return (0);
+	head = list;
+	len = 0;
+	while (1)
+	{
+		len = len + 1;
+		list = list->next;
+		if (list == NULL || list == head)
+			break ;
+	}
+	return (len);
+}
+
+void	free_env_list(t_list **list)
 {
 	t_list	*head;
 	t_list	*cur;
 	t_list	*next;
 
-	if (!list || !*list)
+	if (list == NULL || *list == NULL)
 		return ;
 	head = *list;
 	cur = head;
-	while (cur)
+	while (1)
 	{
 		next = cur->next;
-		free(cur->str);
+		if (cur->str != NULL)
+			free(cur->str);
 		free(cur);
-		if (!next || next == head)
+		if (next == NULL || next == head)
 			break ;
 		cur = next;
 	}
 	*list = NULL;
 }
-/*
-this function frees a circular linked list
-by iterating through each node, freeing the string and then the node itself,
-then sets the original pointer to NULL
-*/
-
-static int	new_elem_to_string(t_list **new, char *elem)
-{
-	(*new) = malloc(sizeof(t_list));
-	if (*new == NULL)
-		return (0);
-	(*new)->str = elem;
-	(*new)->next = NULL;
-	(*new)->prev = NULL;
-	return (1);
-}
-/*
-this function creates a new element for the linked lists
-by allocating memory for it and initializing its fields
-returns 1 on success, 0 on failure
-*/
-
-static void	add_first_elem(t_list **list, t_list *new)
-{
-	(*list) = new;
-	(*list)->next = *list;
-	(*list)->prev = *list;
-}
-/*
-this function adds the first element to an empty circular linked list
-*/
-
-size_t	list_length(t_list *list)
-{
-	t_list	*temp;
-	size_t	count;
-
-	if (list == NULL)
-		return (0);
-	temp = list;
-	count = 1;
-	while (temp->next != list)
-	{
-		count++;
-		temp = temp->next;
-	}
-	return (count);
-}
-/*
-this function counts the amount of elements
-in a circular linked list, the count starts by 1 because
-we start from the head of the list, so its not the same as i = 0;
-*/
-
-int	append_to_list(t_list **list, char *elem)
-{
-	t_list	*new;
-
-	if (!new_elem_to_string(&new, elem))
-		return (0);
-	if (*list == NULL)
-		add_first_elem(list, new);
-	else
-	{
-		new->prev = (*list)->prev;
-		new->next = (*list);
-		(*list)->prev->next = new;
-		(*list)->prev = new;
-	}
-	return (1);
-}
-/*
-this function appends an element into a circular linked list
-in case there is no element, it calls new_elem_to_string and add_first_elem
-to create the first element and adds it to the list, otherwise it
-adjusts the pointers by moving the new element to the end of the list
-and linking it back to the head to maintain the circular structure
-*/

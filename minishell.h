@@ -88,9 +88,9 @@ typedef struct s_shell_state
 /* ===================== UTILITY FUNCTIONS ===================== */
 
 // List utilities
-int		append_to_list(t_list **list, char *elem);
-size_t	list_length(t_list *list);
-void		free_list(t_list **list);
+int		append_to_list(t_list **list, char *s);
+int		list_length(t_list *list);
+void	free_env_list(t_list **list);
 char	**lst_to_arr(t_list *env);
 void	sort_array(char **arr, int len);
 
@@ -189,9 +189,10 @@ int		shell_step(t_data *data);
 void	shell_teardown(t_data *data);
 void	shell_cleanup(t_data *data);
 
-// Legacy function (consider removing)
-int		run_simple_command(char *const argv[], char *const envp[], \
-		t_shell_state *state);
+// Exit status management
+void	ms_set_exit_status(t_data *data, int status);
+int		ms_get_exit_status(t_data *data);
+
 
 /* ===================== MEMORY MANAGEMENT ===================== */
 void	free_token(t_token **list);

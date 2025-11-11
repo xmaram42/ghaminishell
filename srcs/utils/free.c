@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 19:42:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/10/21 14:24:45 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/11 19:45:30 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,3 @@ void    free_array(char **array)
     free(array);
     array = NULL;
 }
-/*
-this function frees every string in a NULL-terminated array of strings,
-then frees the array itself and sets the pointer to NULL
-*/

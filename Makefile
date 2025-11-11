@@ -5,6 +5,15 @@ CFLAGS      := -Wall -Wextra -Werror
 
 # --- Sources / Objects ---
 SRCS := srcs/main.c \
+		srcs/exec/builtins_helpers.c \
+		srcs/exec/builtins_launcher.c \
+		srcs/exec/builtins_wrappers.c \
+		srcs/exec/cmd_finder.c \
+		srcs/exec/exec_child.c \
+		srcs/exec/exec_pipeline.c \
+		srcs/exec/heredoc.c \
+		srcs/exec/shell_loop.c \
+		srcs/exec/shell_exec.c \
         srcs/utils/list_token.c \
 		srcs/utils/utils.c \
 		srcs/utils/utils_array.c \
@@ -32,15 +41,6 @@ SRCS := srcs/main.c \
 		srcs/builtins/args_parse.c \
 		srcs/builtins/export.c \
 		srcs/builtins/builtins_utils.c \
-		srcs/exec/builtins_helpers.c \
-		srcs/exec/builtins_launcher.c \
-		srcs/exec/builtins_wrappers.c \
-		srcs/exec/cmd_finder.c \
-		srcs/exec/exec_child.c \
-		srcs/exec/exec_pipeline.c \
-		srcs/exec/heredoc.c \
-		srcs/exec/shell_loop.c \
-		srcs/exec/shell_exec.c
 
 OBJS := $(SRCS:.c=.o)
 

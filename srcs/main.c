@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:10:23 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/05 16:41:42 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/11 19:53:30 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static int	init_shell_env(t_data *data, char **envp)
 		tmp = ft_strdup(envp[i]);
 		if (!tmp)
 		{
-			free_list(&data->env);
+			free_env_list(&data->env);
 			return (0);
 		}
 		if (!append_to_list(&data->env, tmp))
 		{
-			free_list(&data->env);
+			free_env_list(&data->env);
 			return (0);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/10 18:30:00 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/11 19:25:48 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*find_cmd(t_data *data, char *cmd)
 		return (NULL);
 	}
 	path_str = get_paths(data->env);
-	if (!path_str)
+	if (!path_str || *path_str == '\0')
 		return (cmd_not_found(cmd, 1));
 	paths = ft_split(path_str, ':');
 	if (!paths)
@@ -83,5 +83,5 @@ char	*find_cmd(t_data *data, char *cmd)
 	free_array(paths);
 	if (full_path)
 		return (full_path);
-	return (cmd_not_found(cmd, 0));
+	return (cmd_not_found(cmd, 1));
 }
