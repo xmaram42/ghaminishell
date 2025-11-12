@@ -3,7 +3,6 @@ NAME        := minishell
 CC          := cc
 CFLAGS      := -Wall -Wextra -Werror
 
-# --- Sources / Objects ---
 SRCS := srcs/main.c \
 		srcs/exec/builtins_helpers.c \
 		srcs/exec/builtins_launcher.c \
