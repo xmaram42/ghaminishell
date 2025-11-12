@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:13:50 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 19:53:41 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/12 14:03:26 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ void	shell_teardown(t_data *data)
 	rl_clear_history();
 	free_cmds(&data->cmds);
 	free_token(&data->token);
-	free_env_list(&data->env);
+	if (data->env != NULL)
+		free_env_list(&data->env);
 }

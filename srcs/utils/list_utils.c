@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 19:51:24 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/12 14:13:53 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,6 @@ static t_list	*ms_new_env_node(char *s)
 	return (new);
 }
 
-static void	ms_add_first_env(t_list **list, t_list *new)
-{
-	*list = new;
-	(*list)->next = *list;
-	(*list)->prev = *list;
-}
-
 int	append_to_list(t_list **list, char *s)
 {
 	t_list	*new;
@@ -41,7 +34,7 @@ int	append_to_list(t_list **list, char *s)
 		return (0);
 	if (*list == NULL)
 	{
-		ms_add_first_env(list, new);
+		*list = new;
 		return (1);
 	}
 	new->prev = (*list)->prev;
@@ -72,23 +65,24 @@ int	list_length(t_list *list)
 
 void	free_env_list(t_list **list)
 {
-	t_list	*head;
-	t_list	*cur;
-	t_list	*next;
+    t_list  *head;
+    t_list  *cur;
+    t_list  *next;
 
-	if (list == NULL || *list == NULL)
-		return ;
-	head = *list;
-	cur = head;
-	while (1)
-	{
-		next = cur->next;
-		if (cur->str != NULL)
-			free(cur->str);
-		free(cur);
-		if (next == NULL || next == head)
-			break ;
-		cur = next;
-	}
-	*list = NULL;
+    if (list == NULL || *list == NULL)
+        return ;
+    head = *list;
+    /* Break the ring to make it linear and unambiguous */
+    head->prev->next = NULL;
+    head->prev = NULL;
+    cur = head;
+    while (cur != NULL)
+    {
+        next = cur->next;
+        if (cur->str)
+            free(cur->str);
+        free(cur);
+        cur = next;
+    }
+    *list = NULL;
 }

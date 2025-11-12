@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/11 22:40:00 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:25:39 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,11 @@ static char	*wrap_with_marker(char *content, char marker)
 	free(content);
 	return (wrapped);
 }
-
 int	append_part(char **word, char *part)
 {
 	char	*tmp;
 
-	if (!part)
+	if (part == NULL)
 		return (-1);
 	if (*part == '\0')
 	{
@@ -69,7 +68,7 @@ int	append_part(char **word, char *part)
 	tmp = ft_strjoin(*word, part);
 	free(*word);
 	free(part);
-	if (!tmp)
+	if (tmp == NULL)
 		return (-1);
 	*word = tmp;
 	return (0);
@@ -94,9 +93,10 @@ int	handle_word(t_token **head, char *line, int index)
 {
 	char	*word;
 	char	*part;
+	t_token	*tok;
 
 	word = ft_strdup("");
-	if (!word)
+	if (word == NULL)
 		return (-1);
 	while (line[index] && !is_word_stop(line[index]))
 	{
@@ -111,9 +111,13 @@ int	handle_word(t_token **head, char *line, int index)
 		if (append_part(&word, part) == -1)
 			return (free(word), -1);
 	}
-	add_token_back(head, new_token(word, TOK_CMD));
+	tok = new_token(word, TOK_CMD);
+	if (tok == NULL)
+		return (free(word), -1);
+	add_token_back(head, tok);
 	return (index);
 }
+
 
 int	get_quoted_str(char *line, int index, char **out)
 {
