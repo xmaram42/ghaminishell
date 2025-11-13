@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/10 16:03:59 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/13 17:33:04 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	child_cleanup(t_data *data)
+{
+	if (data->cmds)
+		free_cmds(&data->cmds);
+	if (data->token)
+		free_token(&data->token);
+	if (data->env)
+		free_env_list(&data->env);
+}
+
+static void	child_exit(t_data *data, char *path, char **env, int status)
+{
+	if (env)
+		free_array(env);
+	if (path)
+		free(path);
+	child_cleanup(data);
+	exit(status);
+}
+
 
 static bool	check_dir(char **path, char *cmd, t_data *data)
 {
@@ -95,23 +116,22 @@ void	child_process(t_data *data, t_cmd *cmd, int *pip)
 		status = data->exit_code;
 		if (status == 0)
 			status = 1;
-		exit(status);
+		child_exit(data, NULL, NULL, status);
 	}
 	if (is_builtin(cmd->argv[0]))
 	{
 		launch_builtin(data, cmd);
-		exit(data->exit_code);
+		child_exit(data, NULL, NULL, data->exit_code);
 	}
 	if (cmd_exist(&path, data, cmd->argv[0]))
 	{
 		env = lst_to_arr(data->env);
 		if (!env)
-			exit(1);
+			child_exit(data, path, NULL, 1);
 		execve(path, cmd->argv, env);
 		perror("minishell: execve");
-		free_array(env);
+		child_exit(data, path, env, data->exit_code);
 	}
-	if (path)
-		free(path);
-	exit(data->exit_code);
+	child_exit(data, path, NULL, data->exit_code);
 }
+
