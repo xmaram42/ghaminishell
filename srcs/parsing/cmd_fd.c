@@ -29,7 +29,7 @@ static int	validate_redir_target(t_cmd *cmd, t_token *tok, t_data *data)
 	err = NULL;
 	if (target && target->str && *target->str)
 		err = target->str;
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd("lolipop🍭: syntax error near unexpected token `", 2);
 	if (err)
 		ft_putstr_fd(err, 2);
 	else

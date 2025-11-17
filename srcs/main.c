@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:10:23 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/12 14:24:16 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:03:37 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	init_data(&data, argc, argv);
 	if (!init_shell_env(&data, envp))
 	{
-		ft_putstr_fd("minishell: environment initialization failed\n", 2);
+		ft_putstr_fd("lolipop🍭: environment initialization failed\n", 2);
 		return (1);
 	}
 	setup_parent_signals();

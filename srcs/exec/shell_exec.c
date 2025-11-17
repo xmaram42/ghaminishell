@@ -6,7 +6,7 @@ bool	shell_parse_line(t_data *data, char *line)
 
 	if (has_unclosed_quote(line))
 	{
-		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
+		ft_putstr_fd("lolipop🍭: syntax error: unclosed quote\n", 2);
 		ms_set_exit_status(data, 2);
 		return (false);
 	}

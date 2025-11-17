@@ -30,7 +30,7 @@ int run_simple_command(char *const argv[], char *const envp[], t_shell_state *st
     pid = fork();
     if (pid < 0)
     {
-        perror("minishell: fork");
+        perror("lolipop🍭: fork");
         return (1);
     }
     if (pid == 0)
@@ -39,13 +39,13 @@ int run_simple_command(char *const argv[], char *const envp[], t_shell_state *st
         setup_child_signals();                     /* restore SIGINT/SIGQUIT defaults */
         execve(argv[0], (char *const *)argv, (char *const *)envp);
         /* If execve returns, it failed: choose 126 vs 127 by errno */
-        perror("minishell: execve");
+        perror("lolipop🍭: execve");
         _exit((errno == EACCES) ? 126 : 127);
     }
     state->active_child = pid;                     /* we’re executing a child now */
     if (waitpid(pid, &status, 0) < 0)
     {
-        perror("minishell: waitpid");
+        perror("lolipop🍭: waitpid");
         state->active_child = 0;
         return (1);
     }

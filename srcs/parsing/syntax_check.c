@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 14:20:19 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/10 14:27:53 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:26:34 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_syntax_state
 
 static void	syntax_error(t_data *data, char *token)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd("lolipop🍭: syntax error near unexpected token `", 2);
 	if (token && *token)
 		ft_putstr_fd(token, 2);
 	else
@@ -78,9 +78,17 @@ static void	store_word(t_syntax_state *state)
 	else
 		state->has_cmd = 1;
 }
-
 static int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
 {
+	if (tok->type == TOK_PAREN_OPEN || tok->type == TOK_PAREN_CLOSE)
+	{
+		if (tok->type == TOK_PAREN_OPEN && tok->next
+			&& tok->next->type == TOK_PAREN_CLOSE)
+			syntax_error(data, tok->next->str);
+		else
+			syntax_error(data, tok->str);
+		return (0);
+	}
 	if (tok->type == TOK_PIPE)
 	{
 		if (!handle_pipe(tok, data, state->has_cmd, state->pending_redir))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/12 14:25:39 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:27:23 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,23 @@ static bool	is_plain_break(char c)
 {
 	if (c == ' ' || c == '\t')
 		return (true);
-	if (c == '|' || c == '<' || c == '>')
-		return (true);
+        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')')
+                return (true);
 	if (c == '\'' || c == '\"')
 		return (true);
 	return (false);
 }
 
+
 static bool	is_word_stop(char c)
 {
 	if (c == ' ' || c == '\t')
 		return (true);
-	if (c == '|' || c == '<' || c == '>')
-		return (true);
+        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')')
+                return (true);
 	return (false);
 }
+
 
 static char	*wrap_with_marker(char *content, char marker)
 {
@@ -74,16 +76,41 @@ int	append_part(char **word, char *part)
 	return (0);
 }
 
+static char	*remove_plain_escape(char *segment)
+{
+	char		*clean;
+	size_t		i;
+	size_t		j;
+
+	clean = malloc(ft_strlen(segment) + 1);
+	if (!clean)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (segment[i])
+	{
+		if (segment[i] == '\\' && segment[i + 1])
+			i++;
+		clean[j++] = segment[i];
+		i++;
+	}
+	clean[j] = '\0';
+	free(segment);
+	return (clean);
+}
+
+
 static int	read_plain_segment(char *line, int *index, char **part)
 {
 	int	start;
 
 	start = *index;
 	while (line[*index] && !is_plain_break(line[*index]))
-	{
 		*index = *index + 1;
-	}
 	*part = ft_substr(line, start, *index - start);
+	if (!*part)
+		return (-1);
+	*part = remove_plain_escape(*part);
 	if (!*part)
 		return (-1);
 	return (0);

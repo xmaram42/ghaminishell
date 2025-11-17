@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:50:15 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/05 16:37:38 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:05:29 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_unset(char **argv, t_list **env)
 			remove_env_node(env, argv[i]);
 		else
 		{
-			ft_putstr_fd("minishell: unset: `", 2);
+			ft_putstr_fd("lolipop🍭: unset: `", 2);
 			ft_putstr_fd(argv[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 		}

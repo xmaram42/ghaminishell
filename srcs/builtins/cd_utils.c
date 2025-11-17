@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/05 16:42:18 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:03:52 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	handle_cd_prev(void)
 	last_dir = get_last_dir();
 	if (last_dir[0] == '\0')
 	{
-		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		ft_putstr_fd("lolipop🍭: cd: OLDPWD not set\n", 2);
 		return (1);
 	}
 	if (handle_cd_with_path(last_dir))

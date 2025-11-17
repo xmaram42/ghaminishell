@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_finder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 19:25:48 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:19:40 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,12 @@ static char	*get_paths(t_list *env)
 	return (NULL);
 }
 
+
 static char	*cmd_not_found(char *cmd, int path_missing)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd("lolipop🍭: ", 2);
+	if (cmd)
+		ft_putstr_fd(cmd, 2);
 	if (path_missing)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else
@@ -59,20 +61,17 @@ static char	*cmd_not_found(char *cmd, int path_missing)
 	return (NULL);
 }
 
+
 char	*find_cmd(t_data *data, char *cmd)
 {
 	char	*path_str;
 	char	**paths;
 	char	*full_path;
 
+	if (!cmd || cmd[0] == '\0')
+		return (cmd_not_found(cmd ? cmd : "", 0));
 	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		ft_putstr_fd("minishell: ", 2);
-		perror(cmd);
-		return (NULL);
-	}
+		return (ft_strdup(cmd));
 	path_str = get_paths(data->env);
 	if (!path_str || *path_str == '\0')
 		return (cmd_not_found(cmd, 1));
@@ -83,5 +82,5 @@ char	*find_cmd(t_data *data, char *cmd)
 	free_array(paths);
 	if (full_path)
 		return (full_path);
-	return (cmd_not_found(cmd, 1));
+	return (cmd_not_found(cmd, 0));
 }

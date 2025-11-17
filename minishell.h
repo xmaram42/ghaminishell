@@ -22,13 +22,16 @@
 extern pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
-# define TOK_CMD       0
-# define TOK_ARG       1
-# define TOK_PIPE      2
+# define TOK_CMD               0
+# define TOK_ARG               1
+# define TOK_PIPE              2
 # define TOK_REDIR_IN  3
 # define TOK_REDIR_OUT 4
 # define TOK_APPEND    5
 # define TOK_HEREDOC   6
+# define TOK_PAREN_OPEN        7
+# define TOK_PAREN_CLOSE       8
+
 
 /* ===================== QUOTE MARKERS ===================== */
 # define SQ_MARKER '\1'

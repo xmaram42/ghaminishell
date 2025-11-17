@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:07:42 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/05 16:36:45 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:04:55 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	handle_cd_with_path(char *path)
 {
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd("lolipop🍭: cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": ", 2);
 		perror("");
@@ -77,7 +77,7 @@ static int	handle_cd_to_home(t_list *env)
 	home = get_home_from_env_list(env);
 	if (!home)
 	{
-		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+		ft_putstr_fd("lolipop🍭: cd: HOME not set\n", 2);
 		return (1);
 	}
 	return (handle_cd_with_path(home));
@@ -90,11 +90,11 @@ int	ft_cd(char **args, t_list **env)
 
 	if (!env || !*env)
 	{
-		ft_putstr_fd("minishell: cd: no environment\n", 2);
+		ft_putstr_fd("lolipop🍭: cd: no environment\n", 2);
 		return (1);
 	}
 	if (!getcwd(old_pwd, PATH_MAX))
-		return (perror("minishell: cd"), 1);
+		return (perror("lolipop🍭: cd"), 1);
 	if (!args[1])
 	{
 		if (handle_cd_to_home(*env))
@@ -102,13 +102,13 @@ int	ft_cd(char **args, t_list **env)
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
-		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		ft_putstr_fd("lolipop🍭: cd: OLDPWD not set\n", 2);
 		return (1);
 	}
 	else if (handle_cd_with_path(args[1]))
 		return (1);
 	if (!getcwd(new_pwd, PATH_MAX))
-		return (perror("minishell: cd"), 1);
+		return (perror("lolipop🍭: cd"), 1);
 	if (update_env_var(env, "OLDPWD", old_pwd))
 		return (1);
 	if (update_env_var(env, "PWD", new_pwd))

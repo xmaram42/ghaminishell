@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 16:04:05 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/04 14:13:45 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/17 14:05:15 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void	ft_exit(t_data *data, char **args)
 		ret = almost_atoi(args[1], &err);
 		if (err)
 		{
-			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
+			ft_putstr_fd("lolipop🍭: exit: numeric argument required\n", 2);
 			ret = 2;
 		}
 	}
 	if (args[1] && args[2])
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		ft_putstr_fd("lolipop🍭: exit: too many arguments\n", 2);
 		data->exit_code = 1;
 		return ;
 	}

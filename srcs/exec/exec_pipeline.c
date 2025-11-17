@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 18:48:29 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/17 14:06:22 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static bool	exec_cmd(t_data *data, t_cmd *cmd, int *pip, pid_t *out_pid)
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("minishell: fork");
+		perror("lolipop🍭: fork");
 		return (false);
 	}
 	if (pid == 0)
@@ -178,7 +178,7 @@ static bool	exec_iteration(t_data *data, t_cmd *cmd, pid_t *child_pid)
 	pip[1] = -1;
 	if (cmd->next && pipe(pip) == -1)
 	{
-		perror("minishell: pipe");
+		perror("lolipop🍭: pipe");
 		if (cmd->infile >= 0)
 		{
 			close(cmd->infile);

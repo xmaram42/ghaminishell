@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/13 17:33:04 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/17 14:23:35 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,40 @@ static void	child_exit(t_data *data, char *path, char **env, int status)
 	child_cleanup(data);
 	exit(status);
 }
+static bool	report_exec_error(char *path, t_data *data, int code)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(path);
+	data->exit_code = code;
+	return (false);
+}
 
-
-static bool	check_dir(char **path, char *cmd, t_data *data)
+static bool	check_dir(char *path, t_data *data)
 {
 	struct stat	path_stat;
 
-	stat(*path, &path_stat);
-	if (!S_ISREG(path_stat.st_mode))
+	if (stat(path, &path_stat) != 0)
+		return (report_exec_error(path, data, 126));
+	if (S_ISDIR(path_stat.st_mode))
 	{
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putendl_fd(": is a directory", 2);
 		data->exit_code = 126;
 		return (false);
 	}
 	return (true);
 }
-
+static bool	ensure_executable_path(char *path, t_data *data)
+{
+	if (access(path, F_OK) != 0)
+		return (report_exec_error(path, data, 127));
+	if (!check_dir(path, data))
+		return (false);
+	if (access(path, X_OK) != 0)
+		return (report_exec_error(path, data, 126));
+	return (true);
+}
 static bool	set_cmd_error(t_data *data, int code)
 {
 	data->exit_code = code;
@@ -66,15 +83,12 @@ static bool	cmd_exist(char **path, t_data *data, char *cmd)
 	}
 	if (!(*path))
 		return (set_cmd_error(data, 127));
-	if (access((*path), X_OK))
+	if (!ensure_executable_path(*path, data))
 	{
-		perror(*path);
 		free(*path);
 		*path = NULL;
-		return (set_cmd_error(data, 126));
-	}
-	if (!check_dir(path, cmd, data))
 		return (false);
+	}
 	return (true);
 }
 
@@ -129,7 +143,7 @@ void	child_process(t_data *data, t_cmd *cmd, int *pip)
 		if (!env)
 			child_exit(data, path, NULL, 1);
 		execve(path, cmd->argv, env);
-		perror("minishell: execve");
+		perror("lolipop🍭: execve");
 		child_exit(data, path, env, data->exit_code);
 	}
 	child_exit(data, path, NULL, data->exit_code);
