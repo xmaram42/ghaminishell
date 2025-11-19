@@ -1,4 +1,4 @@
-NAME        := minishell
+git add .NAME        := minishell
 
 CC          := cc
 CFLAGS      := -Wall -Wextra -Werror
@@ -34,16 +34,18 @@ SRCS := srcs/main.c \
 		srcs/parsing/expander.c \
 		srcs/parsing/expander_utils.c \
 		srcs/parsing/syntax_check.c \
+		srcs/parsing/syntax_check_1.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/pwd.c \
 		srcs/builtins/exit.c \
 		srcs/builtins/env.c \
 		srcs/builtins/unset.c \
-		srcs/builtins/cd.c \
-		srcs/builtins/cd_utils.c \
-		srcs/builtins/args_parse.c \
-		srcs/builtins/export.c \
-		srcs/builtins/builtins_utils.c \
+ 		srcs/builtins/cd.c \
+ 		srcs/builtins/cd_utils.c \
+ 		srcs/builtins/args_parse.c \
+ 		srcs/builtins/export.c \
+ 		srcs/builtins/builtins_utils.c \
+		 srcs/builtins/colon.c \
 
 OBJS := $(SRCS:.c=.o)
 

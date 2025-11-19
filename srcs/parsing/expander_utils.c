@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:23:43 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/11 21:00:00 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/19 14:57:51 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,41 +84,6 @@ char	*extract_var_name(char *str, int start)
 		index = index + 1;
 	len = index - (start + 1);
 	return (ft_substr(str, start + 1, len));
-}
-
-char	*expand_tilde(char *word, char **envp)
-{
-	char	*home;
-	char	*expanded;
-	char	*prefix;
-	int	index;
-
-	if (!word)
-		return (NULL);
-	index = 0;
-	while (word[index])
-	{
-		if (word[index] == '~'
-			&& (index == 0 || word[index - 1] == '=')
-			&& (!word[index + 1] || word[index + 1] == '/'))
-		{
-			home = find_env_value("HOME", envp);
-			if (!home)
-				return (ft_strdup(word));
-			expanded = ft_strjoin(home, word + index + 1);
-			if (index == 0)
-				return (expanded);
-			prefix = ft_substr(word, 0, index + 1);
-			if (!prefix)
-			{
-				free(expanded);
-				return (NULL);
-			}
-			return (ft_strjoin_free(prefix, expanded));
-		}
-		index = index + 1;
-	}
-	return (ft_strdup(word));
 }
 
 char	*ft_free_first_str(char *s1, char *s2)

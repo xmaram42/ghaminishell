@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_launcher.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:22:39 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/11 18:21:37 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/19 17:33:37 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,36 @@ static void	restore_stdio(int *stdin_backup, int *stdout_backup)
 }
 
 static void	exec_builtin_dispatch(int *stdin_backup, int *stdout_backup,
-			t_data *shell, t_cmd *command)
+	t_data *shell, t_cmd *command)
 {
-	char	*command_name;
+char	*command_name;
 
 	command_name = command->argv[0];
 	if (strings_equal(command_name, "echo"))
-	    ms_set_exit_status(shell, builtin_echo(command));
+		ms_set_exit_status(shell, builtin_echo(command));
 	else if (strings_equal(command_name, "cd"))
-	    ms_set_exit_status(shell, builtin_cd(shell, command));
+		ms_set_exit_status(shell, builtin_cd(shell, command));
 	else if (strings_equal(command_name, "pwd"))
-	    ms_set_exit_status(shell, builtin_pwd());
+		ms_set_exit_status(shell, builtin_pwd());
 	else if (strings_equal(command_name, "export"))
-	    ms_set_exit_status(shell, builtin_export(shell, command));
+		ms_set_exit_status(shell, builtin_export(shell, command));
 	else if (strings_equal(command_name, "unset"))
-	    ms_set_exit_status(shell, builtin_unset(shell, command));
+		ms_set_exit_status(shell, builtin_unset(shell, command));
 	else if (strings_equal(command_name, "env"))
-	    ms_set_exit_status(shell, builtin_env(shell));
+		ms_set_exit_status(shell, builtin_env(shell));
 	else if (strings_equal(command_name, "clear"))
-		ms_set_exit_status(shell, clear_builtin());	
+		ms_set_exit_status(shell, clear_builtin());
+	else if (strings_equal(command_name, ":"))
+		ms_set_exit_status(shell, builtin_colon(command));
 	else if (strings_equal(command_name, "exit"))
-	    ft_exit(shell, command->argv);
+		ft_exit(shell, command->argv);
 	else if (strings_equal(command_name, "exit"))
 	{
 		restore_stdio(stdin_backup, stdout_backup);
 		ft_exit(shell, command->argv);
 	}
 }
+
 
 static bool	prepare_infile(t_cmd *command, int *stdin_backup, t_data *shell)
 {

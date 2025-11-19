@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:08:58 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/11 21:40:00 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/19 14:53:15 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,26 +74,17 @@ static int	append_missing_brace(char *word, int index, char **result,
 		return (-1);
 	return (ft_strlen(word));
 }
-
-static int	handle_dollar(char *word, int index, char **result,
-		char **envp, int last_exit)
+static int	process_dollar(char *word, t_expand *exp, char **envp)
 {
-	char	*name;
-	char	*value;
 	int	next;
 
-	next = read_variable(word, index, &name);
-	if (next == -2)
-		return (append_missing_brace(word, index, result, name));
+	if (word[exp->index] != '$' || exp->in_single)
+		return (0);
+	next = handle_dollar(word, exp->index, &exp->result, envp, exp->last_exit);
 	if (next == -1)
 		return (-1);
-	value = get_var_value(name, envp, last_exit);
-	free(name);
-	if (!value)
-		return (-1);
-	if (append_part(result, value) == -1)
-		return (-1);
-	return (next);
+	exp->index = next;
+	return (1);
 }
 
 static bool	handle_marker(char *word, int *index, bool *in_single)
@@ -128,31 +119,29 @@ static int	process_dollar(char *word, int *index, char **result,
 
 static char	*expand_loop(char *word, char **envp, int last_exit)
 {
-	char	*result;
-	int	index;
-	int	status;
-	bool	in_single;
+	t_expand	exp;
+	int			status;
 
-	result = ft_strdup("");
-	if (!result)
+	exp.result = ft_strdup("");
+	if (!exp.result)
 		return (NULL);
-	index = 0;
-	in_single = false;
-	while (word[index])
+	exp.index = 0;
+	exp.in_single = false;
+	exp.last_exit = last_exit;
+	while (word[exp.index])
 	{
-		if (handle_marker(word, &index, &in_single))
+		if (handle_marker(word, &exp.index, &exp.in_single))
 			continue ;
-		status = process_dollar(word, &index, &result,
-			envp, last_exit, in_single);
+		status = process_dollar(word, &exp, envp);
 		if (status == -1)
-			return (free(result), NULL);
+			return (free(exp.result), NULL);
 		if (status == 1)
 			continue ;
-		if (append_part(&result, ft_substr(word, index, 1)) == -1)
-			return (free(result), NULL);
-		index = index + 1;
+		if (append_part(&exp.result, ft_substr(word, exp.index, 1)) == -1)
+			return (free(exp.result), NULL);
+		exp.index = exp.index + 1;
 	}
-	return (result);
+	return (exp.result);
 }
 
 char	*expand_value(char *word, char **envp, int last_exit)

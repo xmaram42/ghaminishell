@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:46:20 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/18 16:56:52 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 14:32:26 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	disable_echoctl(void)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &t);
 }
 
-int		ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 
@@ -37,7 +37,7 @@ void	ms_set_exit_status(t_data *data, int status)
 	data->exit_code = status;
 }
 
-int		ms_get_exit_status(t_data *data)
+int	ms_get_exit_status(t_data *data)
 {
 	return (data->exit_code);
 }

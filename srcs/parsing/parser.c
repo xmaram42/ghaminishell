@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:34:44 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/09 17:30:47 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/11/19 14:38:27 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int is_redir(int type)
+static int	is_redir(int type)
 {
 	return (type == TOK_REDIR_IN
 		|| type == TOK_REDIR_OUT || type == TOK_APPEND || type == TOK_HEREDOC);
 }
 
 // Add a command node to the end of the list.
-void add_cmd_back(t_cmd **lst, t_cmd *new)
+void	add_cmd_back(t_cmd **lst, t_cmd *new)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
 	if (!new)
-		return;
+		return ;
 	if (!*lst)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	tmp = *lst;
 	while (tmp->next)
@@ -36,13 +36,13 @@ void add_cmd_back(t_cmd **lst, t_cmd *new)
 	tmp->next = new;
 }
 
-static void start_new_cmd(t_cmd **cmds, t_cmd **current)
+static void	start_new_cmd(t_cmd **cmds, t_cmd **current)
 {
 	*current = new_cmd();
 	add_cmd_back(cmds, *current);
 }
 
-static void process_token(t_cmd *current, t_token **tokens, t_data *data)
+static void	process_token(t_cmd *current, t_token **tokens, t_data *data)
 {
 	if ((*tokens)->type == TOK_PIPE)
 		start_new_cmd(NULL, &current); /* handled outside */
@@ -54,10 +54,11 @@ static void process_token(t_cmd *current, t_token **tokens, t_data *data)
 	else
 		pars_word(current, *tokens, data);
 }
-t_cmd *parser(t_token *tokens, t_data *data)
+
+t_cmd	*parser(t_token *tokens, t_data *data)
 {
-	t_cmd *cmds;
-	t_cmd *current;
+	t_cmd	*cmds;
+	t_cmd	*current;
 
 	cmds = NULL;
 	start_new_cmd(&cmds, &current);

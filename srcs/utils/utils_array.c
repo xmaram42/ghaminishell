@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 16:35:59 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/19 14:20:51 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 14:31:31 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	sort_array(char **arr, int len)
 			if (diff > 0)
 			{
 				ft_swap_str_tab(i, j, arr);
-				continue ;
 			}
 			j++;
 		}

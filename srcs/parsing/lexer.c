@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/18 16:41:05 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:43:11 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	handle_word_with_error(t_token **head, char *line, int i)
 
 t_token	*lexer(char *line)
 {
-	t_token	*head;
+	t_token *head;
 	int		i;
 
 	head = NULL;
@@ -97,6 +97,12 @@ t_token	*lexer(char *line)
 			i = handle_redir_out(&head, line, i);
 		else if (line[i] == '(' || line[i] == ')')
 			i = handle_parenthesis(&head, line, i);
+		else if (line[i] == ';')
+		{
+			add_token_back(&head,
+				new_token(ft_strdup(";"), TOK_SEMICOLON));
+			i++;
+		}
 		else
 		{
 			i = handle_word_with_error(&head, line, i);

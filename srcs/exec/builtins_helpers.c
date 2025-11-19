@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_helpers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 18:29:29 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/07 20:00:00 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/19 17:31:47 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ bool	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "unset")
 		|| !ft_strcmp(cmd, "env")
 		|| !ft_strcmp(cmd, "exit")
-		|| !ft_strcmp(cmd, "clear"))
+		|| !ft_strcmp(cmd, "clear")
+		|| !ft_strcmp(cmd, ":"))
 		return (true);
 	return (false);
 }

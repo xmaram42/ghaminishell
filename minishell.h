@@ -101,6 +101,20 @@ typedef struct s_data
 	bool       exit_flag;
 }	t_data;
 
+typedef struct s_syntax_state
+{
+	int	has_cmd;
+	int	pending_redir;
+}		t_syntax_state;
+
+typedef struct s_expand
+{
+	char	*result;
+	int		index;
+	bool	in_single;
+	int		last_exit;
+}	t_expand;
+
 /* ===================== SHELL STATE (LEGACY) ===================== */
 typedef struct s_shell_state
 {
@@ -146,7 +160,15 @@ int		handle_word(t_token **head, char *line, int i);
 int		get_quoted_str(char *line, int i, char **out);
 int		append_part(char **word, char *part);
 int		has_unclosed_quote(const char *line);
-
+int	validate_tokens(t_token *tokens, t_data *data);
+int	process_token(t_token *tok, t_data *data, t_syntax_state *state);
+void	store_word(t_syntax_state *state);
+int	handle_redir(t_token *tok, t_data *data, t_syntax_state *state);
+int	handle_pipe(t_token *tok, t_data *data, int has_cmd,
+		int pending_redir);
+int	is_double_pipe(t_token *tok);
+int	token_is_redir(int type);
+void	syntax_error(t_data *data, char *token);
 // Parser
 t_cmd	*parser(t_token *tokens, t_data *data);
 t_cmd	*new_cmd(void);
@@ -196,7 +218,7 @@ int		builtin_echo(t_cmd *command);
 int		clear_builtin(void);
 bool	launch_builtin(t_data *shell, t_cmd *command);
 bool	is_builtin(char *cmd);
-
+int		builtin_colon(t_cmd *command);
 
 /* ===================== EXECUTION FUNCTIONS ===================== */
 
