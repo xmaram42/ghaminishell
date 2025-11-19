@@ -4,12 +4,12 @@ bool	shell_parse_line(t_data *data, char *line)
 {
 	t_token	*tokens;
 
-	if (has_unclosed_quote(line))
-	{
-		ft_putstr_fd("lolipop🍭: syntax error: unclosed quote\n", 2);
-		ms_set_exit_status(data, 2);
-		return (false);
-	}
+        if (has_unclosed_quote(line))
+        {
+                error_type_msg(ERR_UNCLOSED_QUOTE, NULL, NULL, 0);
+                ms_set_exit_status(data, 2);
+                return (false);
+        }
 		tokens = lexer(line);
 		if (!tokens)
 			return (false);

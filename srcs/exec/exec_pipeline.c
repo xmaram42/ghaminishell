@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/17 14:06:22 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:09:51 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ static bool	is_assignment_word(const char *word)
 
 static bool	apply_assignment(t_data *data, char *assignment)
 {
-	if (!export(assignment, &data->env))
-	{
-		data->exit_code = 1;
-		print_error(ERR_MALLOC);
-		return (false);
-	}
-	return (true);
+        if (!export(assignment, &data->env))
+        {
+                data->exit_code = 1;
+                error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+                return (false);
+        }
+        return (true);
 }
+
 
 static void	shift_arguments(char **argv, int skip)
 {
@@ -124,12 +125,12 @@ static bool	exec_cmd(t_data *data, t_cmd *cmd, int *pip, pid_t *out_pid)
 {
 	pid_t	pid;
 
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("lolipop🍭: fork");
-		return (false);
-	}
+        pid = fork();
+        if (pid < 0)
+        {
+                error_type_msg(ERR_FORK, NULL, NULL, errno);
+                return (false);
+        }
 	if (pid == 0)
 	{
 		child_process(data, cmd, pip);
@@ -176,12 +177,12 @@ static bool	exec_iteration(t_data *data, t_cmd *cmd, pid_t *child_pid)
 
 	pip[0] = -1;
 	pip[1] = -1;
-	if (cmd->next && pipe(pip) == -1)
-	{
-		perror("lolipop🍭: pipe");
-		if (cmd->infile >= 0)
-		{
-			close(cmd->infile);
+        if (cmd->next && pipe(pip) == -1)
+        {
+                error_type_msg(ERR_PIPE, NULL, NULL, errno);
+                if (cmd->infile >= 0)
+                {
+                        close(cmd->infile);
 			cmd->infile = -1;
 		}
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:10:23 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/17 14:03:37 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:38:01 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	init_data(&data, argc, argv);
-	if (!init_shell_env(&data, envp))
-	{
-		ft_putstr_fd("lolipop🍭: environment initialization failed\n", 2);
-		return (1);
-	}
+        init_data(&data, argc, argv);
+        if (!init_shell_env(&data, envp))
+        {
+                error_type_msg(ERR_ENV_INIT, NULL, NULL, 0);
+                return (1);
+        }
 	setup_parent_signals();
 	while (shell_step(&data))
 		;

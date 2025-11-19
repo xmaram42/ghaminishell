@@ -14,6 +14,10 @@ SRCS := srcs/main.c \
 		srcs/exec/shell_loop.c \
 		srcs/exec/shell_exec.c \
         srcs/utils/list_token.c \
+		srcs/utils/error_msg.c \
+		srcs/utils/error_msg_1.c \
+		srcs/utils/error_msg_2.c \
+		srcs/utils/error_msg_3.c \
 		srcs/utils/utils.c \
 		srcs/utils/utils_array.c \
         srcs/utils/signals.c \

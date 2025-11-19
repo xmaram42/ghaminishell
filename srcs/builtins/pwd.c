@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:47:34 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/09/23 12:50:36 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/18 16:03:30 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 int	ft_pwd(void)
 {
 	char	curr_working_dir[PATH_MAX];
@@ -21,11 +20,11 @@ int	ft_pwd(void)
 		printf("%s\n", curr_working_dir);
 		return (0);
 	}
-	else
-	{
-		perror("pwd");
-		return (1);
-	}
+        else
+        {
+                error_type_msg(ERR_GENERAL, "pwd", NULL, errno);
+                return (1);
+        }
 }
 /*
 This function emulates how the pwd command works,

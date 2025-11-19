@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:50:15 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/17 14:05:29 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:03:55 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,14 @@ int	ft_unset(char **argv, t_list **env)
 	i = 1;
 	while (argv[i])
 	{
-		if (is_valid_env_var_name(argv[i]))
-			remove_env_node(env, argv[i]);
-		else
-		{
-			ft_putstr_fd("lolipop🍭: unset: `", 2);
-			ft_putstr_fd(argv[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-		}
-		i++;
-	}
+                if (is_valid_env_var_name(argv[i]))
+                        remove_env_node(env, argv[i]);
+                else
+                {
+                        error_type_msg(ERR_INVALID_IDENTIFIER, "unset",
+                                argv[i], 0);
+                }
+                i++;
+        }
 	return (0);
 }

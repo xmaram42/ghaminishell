@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 16:04:05 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/17 14:05:15 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:02:10 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,21 @@ void	ft_exit(t_data *data, char **args)
 	ret = data->exit_code;
 	err = 0;
 	ft_putstr_fd("exit\n", 1);
-	if (args[1])
-	{
-		ret = almost_atoi(args[1], &err);
-		if (err)
-		{
-			ft_putstr_fd("lolipop🍭: exit: numeric argument required\n", 2);
-			ret = 2;
-		}
-	}
-	if (args[1] && args[2])
-	{
-		ft_putstr_fd("lolipop🍭: exit: too many arguments\n", 2);
-		data->exit_code = 1;
-		return ;
-	}
+        if (args[1])
+        {
+                ret = almost_atoi(args[1], &err);
+                if (err)
+                {
+                        error_type_msg(ERR_NUMERIC_ARG, "exit", args[1], 0);
+                        ret = 2;
+                }
+        }
+        if (args[1] && args[2])
+        {
+                error_type_msg(ERR_TOO_MANY_ARGS, "exit", NULL, 0);
+                data->exit_code = 1;
+                return ;
+        }
 	data->exit_code = ret;
     data->exit_flag = true;
 	// NOTE: no free_cmds/free_token/free_list/rl_clear_history here

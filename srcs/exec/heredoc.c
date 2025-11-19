@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/17 14:06:30 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:10:44 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static bool	read_heredoc_input(int fd, char *delimiter, t_data *data)
 		line = readline("> ");
 		if (!line)
 		{
-			ft_putstr_fd("lolipop🍭: warning: here-document delimited by EOF\n", 2);
-			break ;
+				error_type_msg(ERR_HEREDOC_EOF, NULL, delimiter, 0);
+				break ;
 		}
 		if (ft_strcmp(line, delimiter) == 0)
 		{

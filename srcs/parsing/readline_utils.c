@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:33:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/27 14:09:11 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/18 16:42:27 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,16 @@ static int	read_continuation(char **line)
 {
 	char	*next;
 
-	next = readline("> ");
-	if (!next)
-	{
-		ft_putstr_fd("lolipop 🍭$ : unexpected EOF\n", 2);
-		free(*line);
-		*line = NULL;
-		return (0);
-	}
+        next = readline("> ");
+        if (!next)
+        {
+                error_type_msg(ERR_UNCLOSED_QUOTE, NULL, NULL, 0);
+                free(*line);
+                *line = NULL;
+                return (0);
+        }
 	return (append_chunk(line, next));
 }
-
 char	*read_full_line(void)
 {
 	char	*line;

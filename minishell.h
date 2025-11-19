@@ -36,11 +36,33 @@ extern pid_t	g_signal_pid;
 /* ===================== QUOTE MARKERS ===================== */
 # define SQ_MARKER '\1'
 # define DQ_MARKER '\2'
-/* ===================== ERROR MESSAGES ===================== */
-# define ERR_MALLOC "Memory allocation failed\n"
-# define ERR_PIPE 	"Pipe creation failed\n"
-# define ERR_FORK 	"Fork failed\n"
-
+/* ===================== ERROR HANDLING ===================== */
+typedef enum e_error_type
+{
+	ERR_CMD_NOT_FOUND,
+	ERR_SYNTAX,
+	ERR_UNCLOSED_QUOTE,
+	ERR_NUMERIC_ARG,
+	ERR_TOO_MANY_ARGS,
+	ERR_INVALID_IDENTIFIER,
+	ERR_HOME_NOT_SET,
+	ERR_OLDPWD_NOT_SET,
+	ERR_ENV_NOT_SET,
+	ERR_NO_SUCH_FILE,
+	ERR_PERMISSION,
+	ERR_IS_DIRECTORY,
+	ERR_AMBIGUOUS_REDIRECT,
+	ERR_HEREDOC_EOF,
+	ERR_FORK,
+	ERR_PIPE,
+	ERR_OPEN_FILE,
+	ERR_CHDIR,
+	ERR_EXECVE,
+	ERR_WAIT,
+	ERR_ENV_INIT,
+	ERR_ALLOCATION,
+	ERR_GENERAL
+}			 t_error_type;
 /* ===================== DATA STRUCTURES ===================== */
 
 typedef struct s_token
@@ -101,7 +123,8 @@ void	sort_array(char **arr, int len);
 void	free_array(char **array);
 void	skip_spaces(char **str);
 char	*extract_arg(char *start, char *end);
-bool	print_error(char *str);
+void	error_type_msg(t_error_type type, char *subject, char *detail,
+	int errnum);
 
 // Signal handling
 void	setup_parent_signals(void);
@@ -200,5 +223,28 @@ int		ms_get_exit_status(t_data *data);
 /* ===================== MEMORY MANAGEMENT ===================== */
 void	free_token(t_token **list);
 void	free_cmds(t_cmd **cmds);
+
+/* ===================== ERROR MSGS MANAGEMENT ===================== */
+void     err_prefix(void);
+void     err_prefix_subject(char *subject);
+void     err_cmd_not_found(char *cmd);
+void     err_unexpected_token(char *token);
+void     err_unclosed_quote(void);
+void     err_with_errno(char *subject, char *detail, int errnum);
+void     err_simple_subject(char *subject, char *message);
+void     err_invalid_identifier(char *subject, char *identifier);
+void     err_too_many(char *subject);
+void     err_numeric(char *subject, char *detail);
+int      handle_state_errors(t_error_type type, char *subject,
+	 char *detail);
+void    error_type_msg(t_error_type type, char *subject, char *detail,
+	 int errnum);
+void     err_heredoc(char *delimiter);
+void     err_allocation(void);
+void     err_env_init(void);
+void     dispatch_system_errors(t_error_type type, char *subject,
+                        char *detail, int errnum);
+int      handle_primary_errors(t_error_type type, char *subject,
+                        char *detail);
 
 #endif

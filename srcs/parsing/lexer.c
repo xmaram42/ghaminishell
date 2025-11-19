@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/17 14:25:05 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:41:05 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ static int handle_redir_out(t_token **head, char *line, int i)
 }
 int	handle_word_with_error(t_token **head, char *line, int i)
 {
-	i = handle_word(head, line, i);
-	if (i == -1)
-	{
-		free_token(head);
-		ft_putstr_fd("lolipop🍭: memory allocation failed\n", 2);
-		return (-1);
-	}
-	return (i);
+        i = handle_word(head, line, i);
+        if (i == -1)
+        {
+                free_token(head);
+                error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+                return (-1);
+        }
+        return (i);
 }
 
 t_token	*lexer(char *line)

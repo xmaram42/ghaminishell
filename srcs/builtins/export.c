@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:08:52 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/06 16:13:37 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/18 16:02:49 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,22 +125,29 @@ int	ft_export(char **str, t_list **env)
 
 	exit_code = 0;
 	i = 1;
-	if (!str || !str[i])
-	{
-		if (*env && !export_no_args((*env)))
-			return (print_error(ERR_MALLOC));
-		return (0);
-	}
-	while (str[i])
-	{
-		if (!valid_identifier(str[i]))
-		{
-			print_error("export: not a valid identifier\n");
-			exit_code = 1;
-		}
-		else if (!export(str[i], env))
-			return (print_error(ERR_MALLOC));
-		i++;
-	}
-	return (exit_code);
+        if (!str || !str[i])
+        {
+                if (*env && !export_no_args((*env)))
+                {
+                        error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+                        return (1);
+                }
+                return (0);
+        }
+        while (str[i])
+        {
+                if (!valid_identifier(str[i]))
+                {
+                        error_type_msg(ERR_INVALID_IDENTIFIER, "export",
+                                str[i], 0);
+                        exit_code = 1;
+                }
+                else if (!export(str[i], env))
+                {
+                        error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+                        return (1);
+                }
+                i++;
+        }
+        return (exit_code);
 }

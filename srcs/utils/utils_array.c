@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   utils_array.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 16:35:59 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/10/30 18:21:16 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/19 14:20:51 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**lst_to_arr(t_list *env)
+char **lst_to_arr(t_list *env)
 {
-	t_list	*lst;
-	char	**dest;
-	int		i;
+	t_list *lst;
+	char **dest;
+	int i;
 
 	if (!env)
 		return (NULL);
@@ -25,12 +25,12 @@ char	**lst_to_arr(t_list *env)
 		return (NULL);
 	i = 0;
 	lst = env;
-	dest[i] = ft_strdup(lst->str);  // CHANGED: Use ft_strdup instead of direct pointer
+	dest[i] = ft_strdup(lst->str); // CHANGED: Use ft_strdup instead of direct pointer
 	lst = lst->next;
 	i++;
 	while (lst != env)
 	{
-		dest[i] = ft_strdup(lst->str);  // CHANGED: Use ft_strdup
+		dest[i] = ft_strdup(lst->str); // CHANGED: Use ft_strdup
 		lst = lst->next;
 		i++;
 	}
@@ -38,8 +38,7 @@ char	**lst_to_arr(t_list *env)
 	return (dest);
 }
 
-
-//swap to elems in array
+// swap to elems in array
 static void	ft_swap_str_tab(int i, int j, char **tab)
 {
 	char	*temp;
@@ -49,7 +48,7 @@ static void	ft_swap_str_tab(int i, int j, char **tab)
 	tab[j] = temp;
 }
 
-//sorts array
+// sorts array
 void	sort_array(char **arr, int len)
 {
 	int	i;
@@ -70,6 +69,6 @@ void	sort_array(char **arr, int len)
 			}
 			j++;
 		}
-	i++;
+		i++;
 	}
 }

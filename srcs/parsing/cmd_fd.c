@@ -29,15 +29,10 @@ static int	validate_redir_target(t_cmd *cmd, t_token *tok, t_data *data)
 	err = NULL;
 	if (target && target->str && *target->str)
 		err = target->str;
-	ft_putstr_fd("lolipop🍭: syntax error near unexpected token `", 2);
-	if (err)
-		ft_putstr_fd(err, 2);
-	else
-		ft_putstr_fd("newline", 2);
-	ft_putendl_fd("'", 2);
-	cmd->skip_cmd = true;
-	data->exit_code = 258;
-	return (0);
+		error_type_msg(ERR_SYNTAX, NULL, err, 0);
+        cmd->skip_cmd = true;
+        data->exit_code = 258;
+        return (0);
 }
 
 static char	*expand_redir_word(t_token *tok, t_data *data, int type)
@@ -54,19 +49,19 @@ static char	*expand_redir_word(t_token *tok, t_data *data, int type)
 		env_arr = lst_to_arr(data->env);
 	else
 		env_arr = ft_calloc(1, sizeof(char *));
-	if (!env_arr)
-	{
-		print_error(ERR_MALLOC);
-		data->exit_code = 1;
-		return (NULL);
-	}
-	expanded = expand_value(tok->str, env_arr, data->exit_code);
-	free_array(env_arr);
-	if (expanded)
-		return (expanded);
-	print_error(ERR_MALLOC);
-	data->exit_code = 1;
-	return (NULL);
+        if (!env_arr)
+        {
+                error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+                data->exit_code = 1;
+                return (NULL);
+        }
+        expanded = expand_value(tok->str, env_arr, data->exit_code);
+        free_array(env_arr);
+        if (expanded)
+                return (expanded);
+        error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+        data->exit_code = 1;
+        return (NULL);
 }
 
 static void	update_cmd_fds(t_cmd *cmd, int type, int fd)

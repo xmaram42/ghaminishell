@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/12 14:13:53 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/19 14:19:08 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_list	*ms_new_env_node(char *s)
+static t_list *ms_new_env_node(char *s)
 {
-	t_list	*new;
+	t_list *new;
 
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
@@ -25,9 +25,9 @@ static t_list	*ms_new_env_node(char *s)
 	return (new);
 }
 
-int	append_to_list(t_list **list, char *s)
+int append_to_list(t_list **list, char *s)
 {
-	t_list	*new;
+	t_list *new;
 
 	new = ms_new_env_node(s);
 	if (new == NULL)
@@ -44,10 +44,10 @@ int	append_to_list(t_list **list, char *s)
 	return (1);
 }
 
-int	list_length(t_list *list)
+int list_length(t_list *list)
 {
-	t_list	*head;
-	int		len;
+	t_list *head;
+	int len;
 
 	if (list == NULL)
 		return (0);
@@ -58,31 +58,31 @@ int	list_length(t_list *list)
 		len = len + 1;
 		list = list->next;
 		if (list == NULL || list == head)
-			break ;
+			break;
 	}
 	return (len);
 }
 
 void	free_env_list(t_list **list)
 {
-    t_list  *head;
-    t_list  *cur;
-    t_list  *next;
+	t_list	*head;
+	t_list	*cur;
+	t_list	*next;
 
-    if (list == NULL || *list == NULL)
-        return ;
-    head = *list;
-    /* Break the ring to make it linear and unambiguous */
-    head->prev->next = NULL;
-    head->prev = NULL;
-    cur = head;
-    while (cur != NULL)
-    {
-        next = cur->next;
-        if (cur->str)
-            free(cur->str);
-        free(cur);
-        cur = next;
-    }
-    *list = NULL;
+	if (list == NULL || *list == NULL)
+		return ;
+	head = *list;
+	/* Break the ring to make it linear and unambiguous */
+	head->prev->next = NULL;
+	head->prev = NULL;
+	cur = head;
+	while (cur != NULL)
+	{
+		next = cur->next;
+		if (cur->str)
+			free(cur->str);
+		free(cur);
+		cur = next;
+	}
+	*list = NULL;
 }
