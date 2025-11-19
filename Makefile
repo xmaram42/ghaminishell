@@ -1,4 +1,4 @@
-git add .NAME        := minishell
+NAME        := minishell
 
 CC          := cc
 CFLAGS      := -Wall -Wextra -Werror
@@ -32,6 +32,7 @@ SRCS := srcs/main.c \
 		srcs/parsing/lexer_quotes.c \
 		srcs/parsing/readline_utils.c \
 		srcs/parsing/expander.c \
+		srcs/parsing/expande_tilde.c \
 		srcs/parsing/expander_utils.c \
 		srcs/parsing/syntax_check.c \
 		srcs/parsing/syntax_check_1.c \

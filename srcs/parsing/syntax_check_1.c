@@ -6,12 +6,11 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 14:42:14 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:42:59 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:03:12 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	store_word(t_syntax_state *state)
 {
@@ -23,6 +22,11 @@ void	store_word(t_syntax_state *state)
 
 int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
 {
+	if (tok->type == TOK_SEMICOLON)
+	{
+		syntax_error(data, tok->str);
+		return (0);
+	}
 	if (tok->type == TOK_PAREN_OPEN || tok->type == TOK_PAREN_CLOSE)
 	{
 		if (tok->type == TOK_PAREN_OPEN && tok->next

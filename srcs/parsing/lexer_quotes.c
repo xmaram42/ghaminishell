@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/17 14:27:23 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:59:45 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	is_plain_break(char c)
 {
 	if (c == ' ' || c == '\t')
 		return (true);
-        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')')
+        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')' || c == ';')
                 return (true);
 	if (c == '\'' || c == '\"')
 		return (true);
@@ -28,10 +28,12 @@ static bool	is_word_stop(char c)
 {
 	if (c == ' ' || c == '\t')
 		return (true);
-        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')')
+        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')' || c == ';')
                 return (true);
 	return (false);
 }
+
+
 
 
 static char	*wrap_with_marker(char *content, char marker)

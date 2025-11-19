@@ -6,13 +6,13 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 17:43:11 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:59:08 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//? 
+//?
 // ** Main lexer: scan the input line and build a list of tokens.
 // ** - Skip spaces/tabs.
 // ** - Detect operators: |, <, >, <<, >>.
@@ -21,61 +21,62 @@
 //?
 
 /* handle operators */
-static int	handle_parenthesis(t_token **head, char *line, int i)
+static int handle_parenthesis(t_token **head, char *line, int i)
 {
-        char    token[2];
-        int             type;
+	char	token[2];
+	int		type;
 
-        token[0] = line[i];
-        token[1] = '\0';
-        if (line[i] == '(')
-                type = TOK_PAREN_OPEN;
-        else
-                type = TOK_PAREN_CLOSE;
-        add_token_back(head, new_token(ft_strdup(token), type));
-        return (i + 1);
+	token[0] = line[i];
+	token[1] = '\0';
+	if (line[i] == '(')
+		type = TOK_PAREN_OPEN;
+	else
+		type = TOK_PAREN_CLOSE;
+	add_token_back(head, new_token(ft_strdup(token), type));
+	return (i + 1);
 }
-static int handle_pipe(t_token **head, char *line, int i)
+
+static int	handle_pipe_token(t_token **head, char *line, int i)
 {
-        if (line[i + 1] == '|')
-        {
-                add_token_back(head, new_token(ft_strdup("||"), TOK_PIPE));
-                return (i + 2);
-        }
-        add_token_back(head, new_token(ft_strdup("|"), TOK_PIPE));
-        return (i + 1);
+	if (line[i + 1] == '|')
+	{
+		add_token_back(head, new_token(ft_strdup("||"), TOK_PIPE));
+		return (i + 2);
+	}
+	add_token_back(head, new_token(ft_strdup("|"), TOK_PIPE));
+	return (i + 1);
 }
 
 static int handle_redir_in(t_token **head, char *line, int i)
 {
-    if (line[i + 1] == '<')
-    {
-        add_token_back(head, new_token(ft_strdup("<<"), TOK_HEREDOC));
-        return (i + 2);
-    }
-    add_token_back(head, new_token(ft_strdup("<"), TOK_REDIR_IN));
-    return (i + 1);
+	if (line[i + 1] == '<')
+	{
+		add_token_back(head, new_token(ft_strdup("<<"), TOK_HEREDOC));
+		return (i + 2);
+	}
+	add_token_back(head, new_token(ft_strdup("<"), TOK_REDIR_IN));
+	return (i + 1);
 }
 static int handle_redir_out(t_token **head, char *line, int i)
 {
-    if (line[i + 1] == '>')
-    {
-        add_token_back(head, new_token(ft_strdup(">>"), TOK_APPEND));
-        return (i + 2);
-    }
-    add_token_back(head, new_token(ft_strdup(">"), TOK_REDIR_OUT));
-    return (i + 1);
+	if (line[i + 1] == '>')
+	{
+		add_token_back(head, new_token(ft_strdup(">>"), TOK_APPEND));
+		return (i + 2);
+	}
+	add_token_back(head, new_token(ft_strdup(">"), TOK_REDIR_OUT));
+	return (i + 1);
 }
-int	handle_word_with_error(t_token **head, char *line, int i)
+int handle_word_with_error(t_token **head, char *line, int i)
 {
-        i = handle_word(head, line, i);
-        if (i == -1)
-        {
-                free_token(head);
-                error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
-                return (-1);
-        }
-        return (i);
+	i = handle_word(head, line, i);
+	if (i == -1)
+	{
+		free_token(head);
+		error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+		return (-1);
+	}
+	return (i);
 }
 
 t_token	*lexer(char *line)
@@ -90,7 +91,7 @@ t_token	*lexer(char *line)
 		if (line[i] == ' ' || line[i] == '\t')
 			i++;
 		else if (line[i] == '|')
-			i = handle_pipe(&head, line, i);
+			i = handle_pipe_token(&head, line, i);
 		else if (line[i] == '<')
 			i = handle_redir_in(&head, line, i);
 		else if (line[i] == '>')
@@ -113,7 +114,6 @@ t_token	*lexer(char *line)
 	return (head);
 }
 
-
 //? The lexer = “sentence cutter”.
 
 //? It breaks a raw input string into meaningful pieces (tokens).
@@ -128,7 +128,7 @@ t_token	*lexer(char *line)
 
 //? Which are redirections.
 
-//? Where pipes split commands 
+//? Where pipes split commands
 
 /**/
 // void    print_tokens(t_token *lst)

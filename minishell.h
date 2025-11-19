@@ -1,4 +1,3 @@
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -31,6 +30,7 @@ extern pid_t	g_signal_pid;
 # define TOK_HEREDOC   6
 # define TOK_PAREN_OPEN        7
 # define TOK_PAREN_CLOSE       8
+# define TOK_SEMICOLON 9
 
 
 /* ===================== QUOTE MARKERS ===================== */
@@ -113,6 +113,7 @@ typedef struct s_expand
 	int		index;
 	bool	in_single;
 	int		last_exit;
+	char	**envp;
 }	t_expand;
 
 /* ===================== SHELL STATE (LEGACY) ===================== */
