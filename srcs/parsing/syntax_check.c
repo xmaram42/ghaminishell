@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 14:20:19 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/19 14:45:33 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 13:57:49 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	handle_pipe(t_token *tok, t_data *data, int has_cmd,
 	syntax_error(data, err);
 	return (0);
 }
-
 
 int	handle_redir(t_token *tok, t_data *data, t_syntax_state *state)
 {

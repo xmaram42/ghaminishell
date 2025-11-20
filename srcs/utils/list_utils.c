@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/19 14:19:08 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 13:56:06 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_list *ms_new_env_node(char *s)
+static t_list	*ms_new_env_node(char *s)
 {
-	t_list *new;
+	t_list	*new;
 
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
@@ -25,9 +25,9 @@ static t_list *ms_new_env_node(char *s)
 	return (new);
 }
 
-int append_to_list(t_list **list, char *s)
+int	append_to_list(t_list **list, char *s)
 {
-	t_list *new;
+	t_list	*new;
 
 	new = ms_new_env_node(s);
 	if (new == NULL)
@@ -44,10 +44,10 @@ int append_to_list(t_list **list, char *s)
 	return (1);
 }
 
-int list_length(t_list *list)
+int	list_length(t_list *list)
 {
-	t_list *head;
-	int len;
+	t_list	*head;
+	int		len;
 
 	if (list == NULL)
 		return (0);
@@ -58,7 +58,7 @@ int list_length(t_list *list)
 		len = len + 1;
 		list = list->next;
 		if (list == NULL || list == head)
-			break;
+			break ;
 	}
 	return (len);
 }
@@ -72,7 +72,6 @@ void	free_env_list(t_list **list)
 	if (list == NULL || *list == NULL)
 		return ;
 	head = *list;
-	/* Break the ring to make it linear and unambiguous */
 	head->prev->next = NULL;
 	head->prev = NULL;
 	cur = head;

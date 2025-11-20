@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/20 12:03:05 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:08:33 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//?
-// ** Main lexer: scan the input line and build a list of tokens.
-// ** - Skip spaces/tabs.
-// ** - Detect operators: |, <, >, <<, >>.
-// ** - Otherwise collect a word (command/argument).
-// ** Returns head of token linked list.
-//?
-
-/* handle operators */
-static int handle_parenthesis(t_token **head, char *line, int i)
+static int	handle_parenthesis(t_token **head, char *line, int i)
 {
 	char	token[2];
 	int		type;
@@ -36,40 +27,6 @@ static int handle_parenthesis(t_token **head, char *line, int i)
 	return (i + 1);
 }
 
-static int	handle_pipe_token(t_token **head, char *line, int i)
-{
-	if (line[i + 1] == '|')
-	{
-		add_token_back(head, new_token(ft_strdup("||"), TOK_PIPE));
-		return (i + 2);
-	}
-	add_token_back(head, new_token(ft_strdup("|"), TOK_PIPE));
-	return (i + 1);
-}
-
-static int	handle_and_token(t_token **head, char *line, int i)
-{
-	if (line[i + 1] == '&')
-	{
-		add_token_back(head, new_token(ft_strdup("&&"), TOK_AND));
-		return (i + 2);
-	}
-	add_token_back(head, new_token(ft_strdup("&"), TOK_AND));
-	return (i + 1);
-}
-
-
-static int	handle_redir_in(t_token **head, char *line, int i)
-{
-	if (line[i + 1] == '<')
-	{
-		add_token_back(head, new_token(ft_strdup("<<"), TOK_HEREDOC));
-		return (i + 2);
-	}
-	add_token_back(head, new_token(ft_strdup("<"), TOK_REDIR_IN));
-	return (i + 1);
-}
-
 static int	handle_redir_out(t_token **head, char *line, int i)
 {
 	if (line[i + 1] == '>')
@@ -80,6 +37,18 @@ static int	handle_redir_out(t_token **head, char *line, int i)
 	add_token_back(head, new_token(ft_strdup(">"), TOK_REDIR_OUT));
 	return (i + 1);
 }
+
+// int	handle_word_with_error(t_token **head, char *line, int i)
+// {
+// 	i = handle_word(head, line, i);
+// 	if (i == -1)
+// 	{
+// 		free_token(head);
+// 		error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+// 		return (-1);
+// 	}
+// 	return (i);
+// }
 
 int	handle_word_with_error(t_token **head, char *line, int i)
 {
@@ -92,9 +61,10 @@ int	handle_word_with_error(t_token **head, char *line, int i)
 	}
 	return (i);
 }
+
 t_token	*lexer(char *line)
 {
-	t_token *head;
+	t_token	*head;
 	int		i;
 
 	head = NULL;
@@ -128,29 +98,3 @@ t_token	*lexer(char *line)
 	}
 	return (head);
 }
-
-//? The lexer = “sentence cutter”.
-
-//? It breaks a raw input string into meaningful pieces (tokens).
-
-//? Those tokens form a linked list.
-
-//?Parser will later look at this list and decide:
-
-//? Which word is the command.
-
-//? Which are arguments.
-
-//? Which are redirections.
-
-//? Where pipes split commands
-
-/**/
-// void    print_tokens(t_token *lst)
-// {
-//     while (lst)
-//     {
-//         printf("[type=%d] \"%s\"\n", lst->type, lst->str);
-//         lst = lst->next;
-//     }
-// }

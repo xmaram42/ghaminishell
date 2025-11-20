@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:08:58 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 18:28:50 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:03:07 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static char	*get_var_value(char *name, char **envp, int last_exit)
 	return (ft_strdup(""));
 }
 
-static int parse_braced_var(char *word, int index, char **name)
+static int	parse_braced_var(char *word, int index, char **name)
 {
-	int position;
+	int	position;
 
 	position = index + 2;
 	while (word[position] && word[position] != '}')
@@ -46,9 +46,9 @@ static int parse_braced_var(char *word, int index, char **name)
 	return (position + 1);
 }
 
-static int read_variable(char *word, int index, char **name)
+static int	read_variable(char *word, int index, char **name)
 {
-	int next;
+	int	next;
 
 	if (word[index + 1] == '{')
 		return (parse_braced_var(word, index, name));
@@ -59,11 +59,11 @@ static int read_variable(char *word, int index, char **name)
 	return (index + next + 1);
 }
 
-static int append_missing_brace(char *word, int index, char **result,
+static int	append_missing_brace(char *word, int index, char **result,
 								char *name)
 {
-	char *tail;
-	int length;
+	char	*tail;
+	int		length;
 
 	length = ft_strlen(word) - index;
 	tail = ft_substr(word, index, length);
@@ -74,6 +74,7 @@ static int append_missing_brace(char *word, int index, char **result,
 		return (-1);
 	return (ft_strlen(word));
 }
+
 static int	handle_dollar(char *word, int index, t_expand *exp)
 {
 	char	*name;
@@ -154,10 +155,10 @@ static char	*expand_loop(char *word, char **envp, int last_exit)
 	return (exp.result);
 }
 
-char *expand_value(char *word, char **envp, int last_exit)
+char	*expand_value(char *word, char **envp, int last_exit)
 {
-	char *tmp;
-	char *result;
+	char	*tmp;
+	char	*result;
 
 	tmp = expand_tilde(word, envp);
 	if (!tmp)

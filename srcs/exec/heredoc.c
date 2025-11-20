@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/18 16:10:44 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:18:06 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static bool	read_heredoc_input(int fd, char *delimiter, t_data *data)
 		line = readline("> ");
 		if (!line)
 		{
-				error_type_msg(ERR_HEREDOC_EOF, NULL, delimiter, 0);
-				break ;
+			error_type_msg(ERR_HEREDOC_EOF, NULL, delimiter, 0);
+			break ;
 		}
 		if (ft_strcmp(line, delimiter) == 0)
 		{
@@ -39,9 +39,9 @@ static bool	read_heredoc_input(int fd, char *delimiter, t_data *data)
 
 int	handle_heredoc(char *delimiter, t_data *data)
 {
-	int	fd;
+	int		fd;
 	char	*filename;
-	int	random_num;
+	int		random_num;
 	char	*suffix;
 
 	random_num = rand() % 10000;
@@ -54,17 +54,9 @@ int	handle_heredoc(char *delimiter, t_data *data)
 		return (-1);
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-	{
-		free(filename);
-		return (-1);
-	}
+		return (free(filename), -1);
 	if (!read_heredoc_input(fd, delimiter, data))
-	{
-		close(fd);
-		unlink(filename);
-		free(filename);
-		return (-1);
-	}
+		return (close(fd), unlink(filename), free(filename), -1);
 	close(fd);
 	fd = open(filename, O_RDONLY);
 	unlink(filename);

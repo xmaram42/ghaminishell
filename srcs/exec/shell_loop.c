@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:13:50 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/12 14:03:26 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/20 14:59:56 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	ms_clear_step(t_data *data)
 	if (data->token != NULL)
 		free_token(&data->token);
 }
+
 int	shell_step(t_data *data)
 {
 	char	*line;

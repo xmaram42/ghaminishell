@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 12:29:31 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:37:20 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:01:37 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void pars_word(t_cmd *cmd, t_token *tok, t_data *data)
+void	pars_word(t_cmd *cmd, t_token *tok, t_data *data)
 {
-	int argc;
-	int i;
-	char **new_argv;
-	char *expanded;
-	char **env_arr;
+	int		argc;
+	int		i;
+	char	**new_argv;
+	char	*expanded;
+	char	**env_arr;
 
 	argc = 0;
 	if (cmd->argv)
@@ -26,7 +26,7 @@ void pars_word(t_cmd *cmd, t_token *tok, t_data *data)
 			argc++;
 	new_argv = malloc(sizeof(char *) * (argc + 2));
 	if (!new_argv)
-		return;
+		return ;
 	i = -1;
 	while (++i < argc)
 		new_argv[i] = cmd->argv[i];
@@ -44,18 +44,17 @@ void pars_word(t_cmd *cmd, t_token *tok, t_data *data)
 /*
 ** Free a linked list of commands and their argv.
 */
-void free_cmds(t_cmd **cmds)
+
+void	free_cmds(t_cmd **cmds)
 {
-	t_cmd *tmp;
-	int i;
+	t_cmd	*tmp;
+	int		i;
 
 	if (!cmds || !*cmds)
-		return; // nothing to free
-
+		return ;
 	while (*cmds)
 	{
 		tmp = (*cmds)->next;
-
 		if ((*cmds)->argv)
 		{
 			i = 0;
@@ -70,27 +69,25 @@ void free_cmds(t_cmd **cmds)
 			close((*cmds)->infile);
 		if ((*cmds)->outfile > 2)
 			close((*cmds)->outfile);
-
 		free(*cmds);
 		*cmds = tmp;
 	}
-
-	*cmds = NULL; // prevent double free or dangling pointer
+	*cmds = NULL;
 }
 
 /*
 ** Allocate and initialize a new command node.
 */
-t_cmd *new_cmd(void)
+t_cmd	*new_cmd(void)
 {
-	t_cmd *cmd;
+	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->argv = NULL;
-	cmd->infile = -1;  // CHANGED: Use -1 as "not set" instead of STDIN_FILENO
-	cmd->outfile = -1; // CHANGED: Use -1 as "not set" instead of STDOUT_FILENO
+	cmd->infile = -1;
+	cmd->outfile = -1;
 	cmd->next = NULL;
 	cmd->skip_cmd = false;
 	return (cmd);

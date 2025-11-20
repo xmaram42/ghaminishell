@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/18 16:09:51 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:02:17 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static bool	is_assignment_word(const char *word)
 {
@@ -33,15 +32,14 @@ static bool	is_assignment_word(const char *word)
 
 static bool	apply_assignment(t_data *data, char *assignment)
 {
-        if (!export(assignment, &data->env))
-        {
-                data->exit_code = 1;
-                error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
-                return (false);
-        }
-        return (true);
+	if (!export(assignment, &data->env))
+	{
+		data->exit_code = 1;
+		error_type_msg(ERR_ALLOCATION, NULL, NULL, 0);
+		return (false);
+	}
+	return (true);
 }
-
 
 static void	shift_arguments(char **argv, int skip)
 {
@@ -125,12 +123,12 @@ static bool	exec_cmd(t_data *data, t_cmd *cmd, int *pip, pid_t *out_pid)
 {
 	pid_t	pid;
 
-        pid = fork();
-        if (pid < 0)
-        {
-                error_type_msg(ERR_FORK, NULL, NULL, errno);
-                return (false);
-        }
+	pid = fork();
+	if (pid < 0)
+	{
+		error_type_msg(ERR_FORK, NULL, NULL, errno);
+		return (false);
+	}
 	if (pid == 0)
 	{
 		child_process(data, cmd, pip);
@@ -170,19 +168,18 @@ static void	wait_all(t_data *data, pid_t last_pid)
 	ms_set_exit_status(data, last_status);
 }
 
-
 static bool	exec_iteration(t_data *data, t_cmd *cmd, pid_t *child_pid)
 {
 	int	pip[2];
 
 	pip[0] = -1;
 	pip[1] = -1;
-        if (cmd->next && pipe(pip) == -1)
-        {
-                error_type_msg(ERR_PIPE, NULL, NULL, errno);
-                if (cmd->infile >= 0)
-                {
-                        close(cmd->infile);
+	if (cmd->next && pipe(pip) == -1)
+	{
+		error_type_msg(ERR_PIPE, NULL, NULL, errno);
+		if (cmd->infile >= 0)
+		{
+			close(cmd->infile);
 			cmd->infile = -1;
 		}
 		return (false);
@@ -211,7 +208,7 @@ bool	exec_pipeline(t_data *data)
 	if (!data->cmds->next && (!data->cmds->argv || !data->cmds->argv[0]))
 		return (true);
 	if (!data->cmds->next && data->cmds->argv
-			&& data->cmds->argv[0] && is_builtin(data->cmds->argv[0]))
+		&& data->cmds->argv[0] && is_builtin(data->cmds->argv[0]))
 		return (launch_builtin(data, data->cmds));
 	cmd = data->cmds;
 	last_pid = -1;

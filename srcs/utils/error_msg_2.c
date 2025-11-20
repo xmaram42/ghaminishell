@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   error_msg_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:48:00 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:15:53 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 13:57:03 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int handle_state_errors(t_error_type type, char *subject,
+int	handle_state_errors(t_error_type type, char *subject,
 						char *detail)
 {
 	if (type == ERR_HOME_NOT_SET)
@@ -32,7 +32,8 @@ int handle_state_errors(t_error_type type, char *subject,
 	return (1);
 }
 
-void error_type_msg(t_error_type type, char *subject, char *detail, int errnum)
+void	error_type_msg(t_error_type type, char *subject, char *detail,
+						int errnum)
 {
 	if (handle_primary_errors(type, subject, detail))
 		return ;

@@ -26,6 +26,7 @@ SRCS := srcs/main.c \
         srcs/utils/list_utils.c \
 		srcs/parsing/lexer.c \
 		srcs/parsing/lexers_utils.c \
+		srcs/parsing/lexer_utils2.c \
 		srcs/parsing/parser_utils.c \
 		srcs/parsing/parser.c \
 		srcs/parsing/cmd_fd.c \
@@ -43,7 +44,7 @@ SRCS := srcs/main.c \
 		srcs/builtins/unset.c \
  		srcs/builtins/cd.c \
  		srcs/builtins/cd_utils.c \
-		srcs/builtins/cd_utils_1.c \
+		srcs/builtins/cd_utils1.c \
  		srcs/builtins/args_parse.c \
  		srcs/builtins/export.c \
  		srcs/builtins/builtins_utils.c \

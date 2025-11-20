@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   readline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:33:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:39:25 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 13:58:37 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int append_chunk(char **line, char *next)
+static int	append_chunk(char **line, char *next)
 {
-	char *tmp;
-	char *joined;
+	char	*tmp;
+	char	*joined;
 
 	tmp = ft_strjoin(*line, "\n");
 	if (!tmp)

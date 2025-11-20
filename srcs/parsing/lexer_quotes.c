@@ -3,43 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:51:21 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/20 12:03:44 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:12:44 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_plain_break(char c)
-{
-	if (c == ' ' || c == '\t')
-		return (true);
-        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')' || c == ';'
-                || c == '&')
-                return (true);
-        if (c == '\'' || c == '\"')
-                return (true);
-        return (false);
-}
-
-
-static bool	is_word_stop(char c)
-{
-	if (c == ' ' || c == '\t')
-		return (true);
-        if (c == '|' || c == '<' || c == '>' || c == '(' || c == ')' || c == ';'
-                || c == '&')
-                return (true);
-        return (false);
-}
-
-
-
-
-
-static char	*wrap_with_marker(char *content, char marker)
+char	*wrap_with_marker(char *content, char marker)
 {
 	char	*wrapped;
 	size_t	len;
@@ -61,6 +34,7 @@ static char	*wrap_with_marker(char *content, char marker)
 	free(content);
 	return (wrapped);
 }
+
 int	append_part(char **word, char *part)
 {
 	char	*tmp;
@@ -103,7 +77,6 @@ static char	*remove_plain_escape(char *segment)
 	free(segment);
 	return (clean);
 }
-
 
 static int	read_plain_segment(char *line, int *index, char **part)
 {
@@ -148,49 +121,4 @@ int	handle_word(t_token **head, char *line, int index)
 		return (free(word), -1);
 	add_token_back(head, tok);
 	return (index);
-}
-
-
-int	get_quoted_str(char *line, int index, char **out)
-{
-	char	quote;
-	int	start;
-
-	quote = line[index];
-	index = index + 1;
-	start = index;
-	while (line[index] && line[index] != quote)
-		index = index + 1;
-	if (line[index] == '\0')
-		return (-1);
-	*out = ft_substr(line, start, index - start);
-	if (!*out)
-		return (-1);
-	if (quote == '\'')
-		*out = wrap_with_marker(*out, SQ_MARKER);
-	else
-		*out = wrap_with_marker(*out, DQ_MARKER);
-	if (!*out)
-		return (-1);
-	return (index + 1);
-}
-
-int	has_unclosed_quote(const char *line)
-{
-	int	index;
-	char	quote;
-
-	index = 0;
-	quote = '\0';
-	while (line[index])
-	{
-		if ((line[index] == '\'' || line[index] == '\"') && !quote)
-			quote = line[index];
-		else if (line[index] == quote)
-			quote = '\0';
-		index = index + 1;
-	}
-	if (quote)
-		return (1);
-	return (0);
 }

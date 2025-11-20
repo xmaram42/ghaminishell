@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
+/*   Updated: 2025/11/20 15:12:57 by ghsaad           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 /* ===================== INCLUDES ===================== */
 # include <stdio.h>
 # include <readline/readline.h>
@@ -33,8 +43,6 @@ extern pid_t	g_signal_pid;
 # define TOK_PAREN_CLOSE       8
 # define TOK_SEMICOLON 9
 # define TOK_AND              10
-
-
 /* ===================== QUOTE MARKERS ===================== */
 # define SQ_MARKER '\1'
 # define DQ_MARKER '\2'
@@ -64,7 +72,7 @@ typedef enum e_error_type
 	ERR_ENV_INIT,
 	ERR_ALLOCATION,
 	ERR_GENERAL
-}			 t_error_type;
+}			t_error_type;
 /* ===================== DATA STRUCTURES ===================== */
 
 typedef struct s_token
@@ -100,7 +108,7 @@ typedef struct s_data
 	int				exit_code;
 	int				pip[2];
 	bool			sq;
-	bool       exit_flag;
+	bool			exit_flag;
 }	t_data;
 
 typedef struct s_syntax_state
@@ -141,7 +149,7 @@ void	free_array(char **array);
 void	skip_spaces(char **str);
 char	*extract_arg(char *start, char *end);
 void	error_type_msg(t_error_type type, char *subject, char *detail,
-	int errnum);
+			int errnum);
 
 // Signal handling
 void	setup_parent_signals(void);
@@ -163,15 +171,24 @@ int		handle_word(t_token **head, char *line, int i);
 int		get_quoted_str(char *line, int i, char **out);
 int		append_part(char **word, char *part);
 int		has_unclosed_quote(const char *line);
-int	validate_tokens(t_token *tokens, t_data *data);
-int	process_token(t_token *tok, t_data *data, t_syntax_state *state);
+int		validate_tokens(t_token *tokens, t_data *data);
+int		process_token(t_token *tok, t_data *data, t_syntax_state *state);
 void	store_word(t_syntax_state *state);
-int	handle_redir(t_token *tok, t_data *data, t_syntax_state *state);
-int	handle_pipe(t_token *tok, t_data *data, int has_cmd,
-		int pending_redir);
-int	is_double_pipe(t_token *tok);
-int	token_is_redir(int type);
+int		handle_redir(t_token *tok, t_data *data, t_syntax_state *state);
+int		handle_pipe(t_token *tok, t_data *data, int has_cmd,
+			int pending_redir);
+int	handle_pipe_token(t_token **head, char *line, int i);
+int		is_double_pipe(t_token *tok);
+int		token_is_redir(int type);
 void	syntax_error(t_data *data, char *token);
+int	handle_and_token(t_token **head, char *line, int i);
+int	handle_redir_in(t_token **head, char *line, int i);
+
+char	*wrap_with_marker(char *content, char marker);
+
+bool	is_plain_break(char c);
+bool	is_word_stop(char c);
+
 // Parser
 t_cmd	*parser(t_token *tokens, t_data *data);
 t_cmd	*new_cmd(void);
@@ -188,7 +205,6 @@ char	*expand_tilde(char *word, char **envp);
 char	*ft_free_first_str(char *s1, char *s2);
 char	*strip_markers(const char *word);
 
-
 // Input handling
 char	*read_full_line(void);
 
@@ -202,7 +218,7 @@ int		ft_cd(char **args, t_list **env);
 int		ft_export(char **str, t_list **env);
 // int		exec_unset(char **argv, t_shell_state *state);
 void	ft_exit(t_data *data, char **args);
-int	ft_unset(char **argv, t_list **env);
+int		ft_unset(char **argv, t_list **env);
 
 // Builtin helpers
 int		is_valid_env_var_name(char *name);
@@ -244,34 +260,33 @@ void	shell_cleanup(t_data *data);
 void	ms_set_exit_status(t_data *data, int status);
 int		ms_get_exit_status(t_data *data);
 
-
 /* ===================== MEMORY MANAGEMENT ===================== */
 void	free_token(t_token **list);
 void	free_cmds(t_cmd **cmds);
 
 /* ===================== ERROR MSGS MANAGEMENT ===================== */
-void     err_prefix(void);
-void     err_prefix_subject(char *subject);
-void     err_cmd_not_found(char *cmd);
-void     err_unexpected_token(char *token);
-void     err_unclosed_quote(void);
-void     err_with_errno(char *subject, char *detail, int errnum);
-void     err_simple_subject(char *subject, char *message);
-void     err_invalid_identifier(char *subject, char *identifier);
-void     err_too_many(char *subject);
-void     err_numeric(char *subject, char *detail);
-int      handle_state_errors(t_error_type type, char *subject,
-	 char *detail);
-void    error_type_msg(t_error_type type, char *subject, char *detail,
-	 int errnum);
-void     err_heredoc(char *delimiter);
-void     err_allocation(void);
-void     err_env_init(void);
-void     dispatch_system_errors(t_error_type type, char *subject,
-	char *detail, int errnum);
-int      handle_primary_errors(t_error_type type, char *subject,char *detail);
-int	handle_cd_to_home(t_list *env);
-int	cd_change_directory(char **args, t_list **env, char *old_pwd);
+void	err_prefix(void);
+void	err_prefix_subject(char *subject);
+void	err_cmd_not_found(char *cmd);
+void	err_unexpected_token(char *token);
+void	err_unclosed_quote(void);
+void	err_with_errno(char *subject, char *detail, int errnum);
+void	err_simple_subject(char *subject, char *message);
+void	err_invalid_identifier(char *subject, char *identifier);
+void	err_too_many(char *subject);
+void	err_numeric(char *subject, char *detail);
+int		handle_state_errors(t_error_type type, char *subject,
+			char *detail);
+void	error_type_msg(t_error_type type, char *subject, char *detail,
+			int errnum);
+void	err_heredoc(char *delimiter);
+void	err_allocation(void);
+void	err_env_init(void);
+void	dispatch_system_errors(t_error_type type, char *subject,
+			char *detail, int errnum);
+int		handle_primary_errors(t_error_type type, char *subject, char *detail);
+int		handle_cd_to_home(t_list *env);
+int		cd_change_directory(char **args, t_list **env, char *old_pwd);
 char	*get_home_from_env_list(t_list *env);
-						
+
 #endif
