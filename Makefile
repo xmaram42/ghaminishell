@@ -43,6 +43,7 @@ SRCS := srcs/main.c \
 		srcs/builtins/unset.c \
  		srcs/builtins/cd.c \
  		srcs/builtins/cd_utils.c \
+		srcs/builtins/cd_utils_1.c \
  		srcs/builtins/args_parse.c \
  		srcs/builtins/export.c \
  		srcs/builtins/builtins_utils.c \

@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:44:07 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:18:12 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 11:07:23 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	err_prefix(void)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("lolipop🍭: ", STDERR_FILENO);
 }
 
 void	err_prefix_subject(char *subject)

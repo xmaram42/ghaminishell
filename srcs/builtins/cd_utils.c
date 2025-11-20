@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/18 16:01:13 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:22:54 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,23 @@ void	update_last_dir(char *path)
 	last_dir = get_last_dir();
 	ft_strlcpy(last_dir, path, PATH_MAX);
 }
+
 int	handle_cd_prev(void)
 {
 	char	*last_dir;
 
-        last_dir = get_last_dir();
-        if (last_dir[0] == '\0')
-        {
-                error_type_msg(ERR_OLDPWD_NOT_SET, "cd", NULL, 0);
-                return (1);
-        }
+	last_dir = get_last_dir();
+	if (last_dir[0] == '\0')
+	{
+		error_type_msg(ERR_OLDPWD_NOT_SET, "cd", NULL, 0);
+		return (1);
+	}
 	if (handle_cd_with_path(last_dir))
 		return (1);
 	printf("%s\n", last_dir);
 	return (0);
 }
+
 char	*create_env_var_string(char *key, char *value)
 {
 	char	*result;

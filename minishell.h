@@ -1,3 +1,4 @@
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -31,6 +32,7 @@ extern pid_t	g_signal_pid;
 # define TOK_PAREN_OPEN        7
 # define TOK_PAREN_CLOSE       8
 # define TOK_SEMICOLON 9
+# define TOK_AND              10
 
 
 /* ===================== QUOTE MARKERS ===================== */
@@ -266,8 +268,10 @@ void     err_heredoc(char *delimiter);
 void     err_allocation(void);
 void     err_env_init(void);
 void     dispatch_system_errors(t_error_type type, char *subject,
-                        char *detail, int errnum);
-int      handle_primary_errors(t_error_type type, char *subject,
-                        char *detail);
-
+	char *detail, int errnum);
+int      handle_primary_errors(t_error_type type, char *subject,char *detail);
+int	handle_cd_to_home(t_list *env);
+int	cd_change_directory(char **args, t_list **env, char *old_pwd);
+char	*get_home_from_env_list(t_list *env);
+						
 #endif

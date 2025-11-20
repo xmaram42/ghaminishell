@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 14:42:14 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 18:03:12 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:05:11 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,16 @@ int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
 		syntax_error(data, tok->str);
 		return (0);
 	}
+	if (tok->type == TOK_AND)
+	{
+		syntax_error(data, tok->str);
+		return (0);
+	}
 	if (tok->type == TOK_PAREN_OPEN || tok->type == TOK_PAREN_CLOSE)
 	{
 		if (tok->type == TOK_PAREN_OPEN && tok->next
-			&& tok->next->type == TOK_PAREN_CLOSE)
-			syntax_error(data, tok->next->str);
+				&& tok->next->type == TOK_PAREN_CLOSE)
+				syntax_error(data, tok->next->str);
 		else
 			syntax_error(data, tok->str);
 		return (0);
@@ -52,7 +57,6 @@ int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
 		store_word(state);
 	return (1);
 }
-
 int	validate_tokens(t_token *tokens, t_data *data)
 {
 	t_syntax_state	state;
