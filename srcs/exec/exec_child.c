@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/18 16:07:49 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:10:06 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ static void     child_cleanup(t_data *data)
                 free_token(&data->token);
         if (data->env)
                 free_env_list(&data->env);
+}
+
+static bool     handle_single_dot(t_data *data, char **argv)
+{
+        if (!argv || !argv[0] || ft_strcmp(argv[0], ".") != 0)
+                return (false);
+        ft_putstr_fd(".: filename argument required\n", STDERR_FILENO);
+        ft_putstr_fd(".: usage: . filename [arguments]\n", STDERR_FILENO);
+        data->exit_code = 2;
+        return (true);
 }
 
 static void     child_exit(t_data *data, char *path, char **env, int status)
@@ -131,6 +141,8 @@ void    child_process(t_data *data, t_cmd *cmd, int *pip)
                         status = 1;
                 child_exit(data, NULL, NULL, status);
         }
+        if (handle_single_dot(data, cmd->argv))
+                child_exit(data, NULL, NULL, data->exit_code);
         if (is_builtin(cmd->argv[0]))
         {
                 launch_builtin(data, cmd);
@@ -150,4 +162,5 @@ void    child_process(t_data *data, t_cmd *cmd, int *pip)
         }
         child_exit(data, path, NULL, data->exit_code);
 }
+
 

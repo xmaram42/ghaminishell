@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 16:04:05 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/18 16:02:10 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:09:24 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 // 	}
 // 	return (1);
 // }
-
 static int	almost_atoi(char *str, int *err)
 {
 	unsigned long long	ret;
@@ -50,10 +49,13 @@ static int	almost_atoi(char *str, int *err)
 		ret = ret * 10 + (str[i++] - 48);
 	while ((9 <= str[i] && str[i] <= 13) || str[i] == 32)
 		i++;
-	if (str[i] || i - j > 20 || ((pn == -1 && (ret - 1) > LONG_MAX) || \
-		(pn == 1 && (ret > LONG_MAX))))
-		*err = 1;
-	return ((int)((ret * pn) % 256));
+        if (str[i] || i - j > 20 || ((pn == -1 && (ret - 1) > LONG_MAX) || \
+                (pn == 1 && (ret > LONG_MAX))))
+        {
+                *err = 1;
+                return (255);
+        }
+        return ((int)((ret * pn) % 256));
 }
 
 void	ft_exit(t_data *data, char **args)
@@ -70,7 +72,7 @@ void	ft_exit(t_data *data, char **args)
                 if (err)
                 {
                         error_type_msg(ERR_NUMERIC_ARG, "exit", args[1], 0);
-                        ret = 2;
+                        ret = 255;
                 }
         }
         if (args[1] && args[2])

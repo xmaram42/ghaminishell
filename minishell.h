@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 15:12:57 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/20 17:39:00 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,8 +247,7 @@ void	child_process(t_data *data, t_cmd *cmd, int *pip);
 char	*find_cmd(t_data *data, char *cmd);
 
 // Heredoc
-int		handle_heredoc(char *delimiter, t_data *data);
-
+int		handle_heredoc(char *delimiter, bool expand, t_data *data);
 // Shell execution flow
 bool	shell_parse_line(t_data *data, char *line);
 bool	shell_exec(t_data *data);

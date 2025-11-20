@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 14:34:38 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:35:44 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:15:17 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,22 @@ static int	validate_redir_target(t_cmd *cmd, t_token *tok, t_data *data)
 	return (0);
 }
 
-static char	*expand_redir_word(t_token *tok, t_data *data, int type)
+static bool		delimiter_should_expand(char *word)
+{
+	int		index;
+
+	index = 0;
+	while (word && word[index])
+	{
+		if (word[index] == SQ_MARKER || word[index] == DQ_MARKER)
+			return (false);
+		index++;
+	}
+	return (true);
+}
+
+static char	*expand_redir_word(t_token *tok, t_data *data, int type,
+		bool *expand_delim)
 {
 	char	**env_arr;
 	char	*expanded;
@@ -55,7 +70,11 @@ static char	*expand_redir_word(t_token *tok, t_data *data, int type)
 	if (!tok)
 		return (NULL);
 	if (type == TOK_HEREDOC)
+	{
+		if (expand_delim)
+			*expand_delim = delimiter_should_expand(tok->str);
 		return (strip_markers(tok->str));
+	}
 	env_arr = NULL;
 	if (data->env)
 		env_arr = lst_to_arr(data->env);
@@ -96,6 +115,7 @@ void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
 {
 	int		fd;
 	int		type;
+	bool	expand_delim;
 	char	*name;
 
 	if (!cmd || !tok || !data || cmd->skip_cmd)
@@ -103,7 +123,8 @@ void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
 	if (!validate_redir_target(cmd, tok, data))
 		return ;
 	type = tok->type;
-	name = expand_redir_word(tok->next, data, type);
+	expand_delim = true;
+	name = expand_redir_word(tok->next, data, type, &expand_delim);
 	if (!name)
 	{
 		cmd->skip_cmd = true;
@@ -111,14 +132,15 @@ void	parse_redir(t_cmd *cmd, t_token *tok, t_data *data)
 	}
 	fd = -1;
 	if (type == TOK_HEREDOC)
-		fd = handle_heredoc(name, data);
+		fd = handle_heredoc(name, expand_delim, data);
 	else
 		fd = open_redir_file(type, name);
 	free(name);
 	if (fd < 0)
 	{
 		cmd->skip_cmd = true;
-		data->exit_code = 1;
+		if (data->exit_code != 130)
+			data->exit_code = 1;
 		return ;
 	}
 	update_cmd_fds(cmd, type, fd);
