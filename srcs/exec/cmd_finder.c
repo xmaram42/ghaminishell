@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_finder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/18 16:06:40 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:00:35 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static char	*search_in_path(char *cmd, char **paths)
 {
 	char	full_path[1024];
-	int	i;
+	int		i;
 
 	i = 0;
 	while (paths[i])
@@ -50,14 +50,12 @@ static char	*get_paths(t_list *env)
 
 static char	*cmd_not_found(char *cmd, int path_missing)
 {
-
 	if (path_missing)
-	error_type_msg(ERR_NO_SUCH_FILE, cmd, NULL, 0);
+		error_type_msg(ERR_NO_SUCH_FILE, cmd, NULL, 0);
 	else
 		error_type_msg(ERR_CMD_NOT_FOUND, cmd, NULL, 0);
 	return (NULL);
 }
-
 
 char	*find_cmd(t_data *data, char *cmd)
 {
@@ -66,7 +64,12 @@ char	*find_cmd(t_data *data, char *cmd)
 	char	*full_path;
 
 	if (!cmd || cmd[0] == '\0')
-		return (cmd_not_found(cmd ? cmd : "", 0));
+	{
+		if (cmd)
+			return (cmd_not_found(cmd, 0));
+		else
+			return (cmd_not_found("", 0));
+	}
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	path_str = get_paths(data->env);

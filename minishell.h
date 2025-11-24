@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 17:39:00 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:29:13 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,13 @@ typedef struct s_expand
 	char	**envp;
 }	t_expand;
 
+typedef struct s_heredoc_args
+{
+	bool	expand;
+	char	**env_arr;
+	t_data	*data;
+}	t_heredoc_args;
+
 /* ===================== SHELL STATE (LEGACY) ===================== */
 typedef struct s_shell_state
 {
@@ -177,12 +184,12 @@ void	store_word(t_syntax_state *state);
 int		handle_redir(t_token *tok, t_data *data, t_syntax_state *state);
 int		handle_pipe(t_token *tok, t_data *data, int has_cmd,
 			int pending_redir);
-int	handle_pipe_token(t_token **head, char *line, int i);
+int		handle_pipe_token(t_token **head, char *line, int i);
 int		is_double_pipe(t_token *tok);
 int		token_is_redir(int type);
 void	syntax_error(t_data *data, char *token);
-int	handle_and_token(t_token **head, char *line, int i);
-int	handle_redir_in(t_token **head, char *line, int i);
+int		handle_and_token(t_token **head, char *line, int i);
+int		handle_redir_in(t_token **head, char *line, int i);
 
 char	*wrap_with_marker(char *content, char marker);
 
@@ -287,5 +294,17 @@ int		handle_primary_errors(t_error_type type, char *subject, char *detail);
 int		handle_cd_to_home(t_list *env);
 int		cd_change_directory(char **args, t_list **env, char *old_pwd);
 char	*get_home_from_env_list(t_list *env);
+
+int		cleanup_heredoc(int fd, char *filename, char **env_arr, int return_val);
+bool	read_heredoc_input(int fd, char *delimiter, t_heredoc_args *args);
+bool	process_heredoc_line(int fd, char *line, t_heredoc_args *args);
+
+void	restore_signals(struct sigaction *old_int,
+	struct sigaction *old_quit);
+void	set_heredoc_signals(struct sigaction *old_int,
+		struct sigaction *old_quit);
+void	heredoc_sigint(int signo);
+char	*expand_heredoc_line(char *line, bool expand,
+	char **env_arr, t_data *data);
 
 #endif

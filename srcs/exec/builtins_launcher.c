@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_launcher.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:22:39 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/19 17:33:37 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:05:27 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	restore_stdio(int *stdin_backup, int *stdout_backup)
 static void	exec_builtin_dispatch(int *stdin_backup, int *stdout_backup,
 	t_data *shell, t_cmd *command)
 {
-char	*command_name;
+	char	*command_name;
 
 	command_name = command->argv[0];
 	if (strings_equal(command_name, "echo"))
@@ -58,7 +58,6 @@ char	*command_name;
 		ft_exit(shell, command->argv);
 	}
 }
-
 
 static bool	prepare_infile(t_cmd *command, int *stdin_backup, t_data *shell)
 {

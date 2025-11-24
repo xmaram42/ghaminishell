@@ -11,6 +11,7 @@ SRCS := srcs/main.c \
 		srcs/exec/exec_child.c \
 		srcs/exec/exec_pipeline.c \
 		srcs/exec/heredoc.c \
+		srcs/exec/heredoc_utils.c \
 		srcs/exec/shell_loop.c \
 		srcs/exec/shell_exec.c \
         srcs/utils/list_token.c \
