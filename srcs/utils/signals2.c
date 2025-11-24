@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 10:20:46 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/24 16:55:18 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/24 17:51:25 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void	signals2(void)
 
 void	heredoc_sigint(int signo)
 {
-	(void)signo;
-	g_signal_pid = -1;
+	if (signo == SIGINT)
+		g_signal_pid = signo;
 	write(STDOUT_FILENO, "\n", 1);
+	close(STDIN_FILENO);
 }
 
 void	set_heredoc_signals(struct sigaction *old_int,

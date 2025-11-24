@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:59:49 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 14:59:50 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/24 19:50:15 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ bool	shell_parse_line(t_data *data, char *line)
 		return (false);
 	}
 	tokens = lexer(line);
+	t_token *tmp = tokens;
+	while(tmp)
+	{
+		printf("Token: %s, Type: %d\n", tmp->str, tmp->type);
+		tmp = tmp->next;
+	}
 	if (!tokens)
 		return (false);
 	if (!validate_tokens(tokens, data))
@@ -32,6 +38,18 @@ bool	shell_parse_line(t_data *data, char *line)
 	}
 	data->token = tokens;
 	data->cmds = parser(tokens, data);
+	printf("PARSER DONE\n");
+	t_cmd *tmp_cmd = data->cmds;
+	while (tmp_cmd)
+	{
+		printf("Command:\n");
+		for (int i = 0; tmp_cmd->argv && tmp_cmd->argv[i]; i++)
+			printf("  Arg[%d]: %s\n", i, tmp_cmd->argv[i]);
+		printf("  Infile: %d\n", tmp_cmd->infile);
+		printf("  Outfile: %d\n", tmp_cmd->outfile);
+		printf("Skip Command: %s\n", tmp_cmd->skip_cmd ? "true" : "false");
+		tmp_cmd = tmp_cmd->next;
+	}
 	if (!data->cmds)
 	{
 		free_token(&tokens);

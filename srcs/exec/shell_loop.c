@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:13:50 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 14:59:56 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/24 19:42:06 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	shell_step(t_data *data)
 		return (0);
 	return (1);
 }
+
 
 void	shell_teardown(t_data *data)
 {

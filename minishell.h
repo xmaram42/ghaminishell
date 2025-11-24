@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/24 15:29:13 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/24 19:49:30 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@
 extern pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
-# define TOK_CMD               0
-# define TOK_ARG               1
-# define TOK_PIPE              2
-# define TOK_REDIR_IN  3
-# define TOK_REDIR_OUT 4
-# define TOK_APPEND    5
-# define TOK_HEREDOC   6
-# define TOK_PAREN_OPEN        7
-# define TOK_PAREN_CLOSE       8
-# define TOK_SEMICOLON 9
-# define TOK_AND              10
+# define TOK_CMD 				0
+# define TOK_ARG 				1
+# define TOK_PIPE				2
+# define TOK_REDIR_IN  			3
+# define TOK_REDIR_OUT 			4
+# define TOK_APPEND    			5
+# define TOK_HEREDOC   			6
+# define TOK_PAREN_OPEN 		7
+# define TOK_PAREN_CLOSE		8
+# define TOK_SEMICOLON			9
+# define TOK_AND				10
 /* ===================== QUOTE MARKERS ===================== */
 # define SQ_MARKER '\1'
 # define DQ_MARKER '\2'
@@ -92,7 +92,7 @@ typedef struct s_list
 
 typedef struct s_cmd
 {
-	bool			skip_cmd;
+	bool			skip_cmd; //means there was an error parsing this command
 	char			**argv;
 	int				infile;
 	int				outfile;

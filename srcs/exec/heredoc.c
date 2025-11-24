@@ -6,7 +6,7 @@
 /*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/24 15:29:02 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/24 19:41:18 by ghsaad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ static int	execute_heredoc(char *delimiter, bool expand, t_data *data)
 	restore_signals(&sig[0], &sig[1]);
 	return (cleanup_heredoc(fd, filename, env_arr, fd));
 }
+// this function creates a temp file, reads the heredoc input, writes it to the file,
+// and returns the write file descriptor with the filename encoded in the upper bits.
 
 int	handle_heredoc(char *delimiter, bool expand, t_data *data)
 {
@@ -92,3 +94,9 @@ int	handle_heredoc(char *delimiter, bool expand, t_data *data)
 		return (-1);
 	return (read_fd);
 }
+
+/*
+in handle heredoc, read fd opens the temp file for reading and returns its fd, the ~0xFF
+is just a trick to pass the filename through the int return value, meaning the fd is invalid
+ because we used the upper bits to store the filename pointer.
+*/
