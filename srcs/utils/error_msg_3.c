@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:47:09 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/19 14:17:42 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/25 14:58:34 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 void	err_heredoc(char *delimiter)
 {
-	err_prefix();
-	ft_putstr_fd("warning: here-document delimited by end-of-file", 2);
-	if (delimiter)
-	{
-		ft_putstr_fd(" (wanted `", 2);
-		ft_putstr_fd(delimiter, 2);
-		ft_putstr_fd("')", 2);
-	}
-	ft_putstr_fd("\n", 2);
+	(void)delimiter;
+	// err_prefix();
+	// ft_putstr_fd("warning: here-document delimited by end-of-file", 2);
+	// if (delimiter)
+	// {
+	// 	ft_putstr_fd(" (wanted `", 2);
+	// 	ft_putstr_fd(delimiter, 2);
+	// 	ft_putstr_fd("')", 2);
+	// }
+	// ft_putstr_fd("\n", 2);
 }
 
 void	err_allocation(void)

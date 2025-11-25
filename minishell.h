@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/24 19:49:30 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/25 14:46:17 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,12 @@ typedef struct s_expand
 
 typedef struct s_heredoc_args
 {
-	bool	expand;
-	char	**env_arr;
-	t_data	*data;
-}	t_heredoc_args;
+    bool    expand;
+    char    **env_arr;
+    t_data  *data;
+    int     fd;      // ← NEW
+    char    *line;   // ← NEW (optional but needed for your read_heredoc_input)
+}   t_heredoc_args;
 
 /* ===================== SHELL STATE (LEGACY) ===================== */
 typedef struct s_shell_state
@@ -255,6 +257,9 @@ char	*find_cmd(t_data *data, char *cmd);
 
 // Heredoc
 int		handle_heredoc(char *delimiter, bool expand, t_data *data);
+char    *create_heredoc_filename(void);
+char    **setup_heredoc_env(bool expand, t_data *data);
+int     finish_heredoc(int fd, char *filename);
 // Shell execution flow
 bool	shell_parse_line(t_data *data, char *line);
 bool	shell_exec(t_data *data);

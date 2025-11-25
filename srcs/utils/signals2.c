@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 10:20:46 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/24 17:51:25 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/25 14:33:24 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ void	signals2(void)
 
 void	heredoc_sigint(int signo)
 {
-	if (signo == SIGINT)
-		g_signal_pid = signo;
+	(void)signo;
 	write(STDOUT_FILENO, "\n", 1);
-	close(STDIN_FILENO);
 }
+
 
 void	set_heredoc_signals(struct sigaction *old_int,
 				struct sigaction *old_quit)
