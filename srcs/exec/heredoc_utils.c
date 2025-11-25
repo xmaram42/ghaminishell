@@ -65,7 +65,7 @@ int	cleanup_heredoc(int fd, char *filename, char **env_arr, int return_val)
 	free_array(env_arr);
 	return (return_val);
 }
-
+// change rand
 char	*create_heredoc_filename(void)
 {
 	static int	counter = 0;

@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/25 14:46:17 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:43:45 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	error_type_msg(t_error_type type, char *subject, char *detail,
 void	setup_parent_signals(void);
 void	setup_child_signals(void);
 void	signals2(void);
+void	set_parent_ignore_signals(void);
 void	disable_echoctl(void);
 
 // String utilities

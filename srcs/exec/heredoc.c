@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 14:00:00 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/25 14:32:34 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:45:02 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ static int	run_heredoc_child(char *delimiter, t_heredoc_args *args)
 	pid_t	pid;
 	int		status;
 
+	set_parent_ignore_signals();
 	pid = fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
 		heredoc_child(args->fd, delimiter, args);
 	waitpid(pid, &status, 0);
+	setup_parent_signals();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		args->data->exit_code = 130;
@@ -43,6 +45,7 @@ static int	run_heredoc_child(char *delimiter, t_heredoc_args *args)
 	}
 	return (0);
 }
+
 
 int	handle_heredoc(char *delimiter, bool expand, t_data *data)
 {

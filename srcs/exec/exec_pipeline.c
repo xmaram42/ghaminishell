@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 15:02:17 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/25 16:44:19 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,6 @@ static bool	exec_iteration(t_data *data, t_cmd *cmd, pid_t *child_pid)
 	}
 	return (true);
 }
-
 bool	exec_pipeline(t_data *data)
 {
 	t_cmd	*cmd;
@@ -212,14 +211,19 @@ bool	exec_pipeline(t_data *data)
 		return (launch_builtin(data, data->cmds));
 	cmd = data->cmds;
 	last_pid = -1;
+	set_parent_ignore_signals();
 	while (cmd)
 	{
 		if (!exec_iteration(data, cmd, &child_pid))
+		{
+			setup_parent_signals();
 			return (false);
+		}
 		if (!cmd->next)
 			last_pid = child_pid;
 		cmd = cmd->next;
 	}
 	wait_all(data, last_pid);
+	setup_parent_signals();
 	return (true);
 }
