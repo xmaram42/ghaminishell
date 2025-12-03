@@ -48,12 +48,19 @@ static int	exist(char *str, t_list *env)
 static bool	update_existing_var(t_list **env, int pos, char *value)
 {
 	int	i;
+	t_list *node;
 
+	if (!env || !*env)
+	{
+		free(value);
+		return (false);
+	}
 	i = 0;
-	while (i++ < pos)
-		(*env) = (*env)->next;
-	free((*env)->str);
-	(*env)->str = value;
+	node = *env;
+	while (i++ < pos && node->next)
+	    node = node->next; 
+	free((node->str));
+	node->str = value;
 	return (true);
 }
 

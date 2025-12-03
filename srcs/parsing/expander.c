@@ -53,6 +53,7 @@ static char	*expand_loop(char *word, char **envp, int last_exit)
 {
 	t_expand	exp;
 	int			status;
+	int prev_index;
 
 	exp.result = ft_strdup("");
 	if (!exp.result)
@@ -63,6 +64,7 @@ static char	*expand_loop(char *word, char **envp, int last_exit)
 	exp.envp = envp;
 	while (word[exp.index])
 	{
+		prev_index = exp.index;
 		if (!handle_marker(word, &exp.index, &exp.in_single))
 		{
 			status = process_dollar(word, &exp);
@@ -71,6 +73,8 @@ static char	*expand_loop(char *word, char **envp, int last_exit)
 			if (status == 0 && handle_regular_char(word, &exp) == -1)
 				return (free(exp.result), NULL);
 		}
+		if (exp.index == prev_index)
+		    exp.index++;
 	}
 	return (exp.result);
 }
