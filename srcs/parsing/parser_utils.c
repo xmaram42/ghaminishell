@@ -3,92 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: deep <deep@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 12:29:31 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/20 14:01:37 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 00:47:36 by deep             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pars_word(t_cmd *cmd, t_token *tok, t_data *data)
+int	get_argc(char **argv)
 {
-	int		argc;
-	int		i;
-	char	**new_argv;
-	char	*expanded;
-	char	**env_arr;
+	int	argc;
 
 	argc = 0;
-	if (cmd->argv)
-		while (cmd->argv[argc])
+	if (argv)
+		while (argv[argc])
 			argc++;
-	new_argv = malloc(sizeof(char *) * (argc + 2));
-	if (!new_argv)
-		return ;
-	i = -1;
-	while (++i < argc)
-		new_argv[i] = cmd->argv[i];
-	env_arr = lst_to_arr(data->env);
-	expanded = expand_value(tok->str, env_arr, data->exit_code);
-	free_array(env_arr);
-	if (expanded)
-		new_argv[argc] = expanded;
-	else
-		new_argv[argc] = ft_strdup(tok->str);
-	new_argv[argc + 1] = NULL;
-	free(cmd->argv);
-	cmd->argv = new_argv;
+	return (argc);
 }
-/*
-** Free a linked list of commands and their argv.
-*/
 
-void	free_cmds(t_cmd **cmds)
+char	**create_new_argv(char **old_argv, int argc)
 {
-	t_cmd	*tmp;
+	char	**new_argv;
 	int		i;
 
-	if (!cmds || !*cmds)
-		return ;
-	while (*cmds)
-	{
-		tmp = (*cmds)->next;
-		if ((*cmds)->argv)
-		{
-			i = 0;
-			while ((*cmds)->argv[i])
-			{
-				free((*cmds)->argv[i]);
-				i++;
-			}
-			free((*cmds)->argv);
-		}
-		if ((*cmds)->infile > 2)
-			close((*cmds)->infile);
-		if ((*cmds)->outfile > 2)
-			close((*cmds)->outfile);
-		free(*cmds);
-		*cmds = tmp;
-	}
-	*cmds = NULL;
-}
-
-/*
-** Allocate and initialize a new command node.
-*/
-t_cmd	*new_cmd(void)
-{
-	t_cmd	*cmd;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
+	new_argv = malloc(sizeof(char *) * (argc + 2));
+	if (!new_argv)
 		return (NULL);
-	cmd->argv = NULL;
-	cmd->infile = -1;
-	cmd->outfile = -1;
-	cmd->next = NULL;
-	cmd->skip_cmd = false;
-	return (cmd);
+	i = -1;
+	while (++i < argc)
+		new_argv[i] = old_argv[i];
+	return (new_argv);
 }

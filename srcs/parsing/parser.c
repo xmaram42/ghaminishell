@@ -61,6 +61,7 @@ t_cmd	*parser(t_token *tokens, t_data *data)
 
 	cmds = NULL;
 	start_new_cmd(&cmds, &current);
+	data->cmds = cmds;
 	while (tokens)
 	{
 		if (tokens->type == TOK_PIPE)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_msg_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:47:09 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/25 14:58:34 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 00:26:33 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 void	err_heredoc(char *delimiter)
 {
 	(void)delimiter;
-	// err_prefix();
-	// ft_putstr_fd("warning: here-document delimited by end-of-file", 2);
-	// if (delimiter)
-	// {
-	// 	ft_putstr_fd(" (wanted `", 2);
-	// 	ft_putstr_fd(delimiter, 2);
-	// 	ft_putstr_fd("')", 2);
-	// }
-	// ft_putstr_fd("\n", 2);
 }
 
 void	err_allocation(void)

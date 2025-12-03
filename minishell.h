@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/25 16:43:45 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:25:32 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <signal.h>
+# include <string.h>
 # include <errno.h>
 # include <stdbool.h>
 # include <sys/stat.h>
@@ -128,12 +129,22 @@ typedef struct s_expand
 
 typedef struct s_heredoc_args
 {
-    bool    expand;
-    char    **env_arr;
-    t_data  *data;
-    int     fd;      // ← NEW
-    char    *line;   // ← NEW (optional but needed for your read_heredoc_input)
-}   t_heredoc_args;
+	bool	expand;
+	char	**env_arr;
+	t_data	*data;
+	int		fd;
+	char	*line;
+	char	*filename;
+	char	*delimiter;
+}	t_heredoc_args;
+
+typedef struct s_hdoc_pack
+{
+	bool	expand;
+	char	**env_arr;
+	t_data	*data;
+	int		fd;
+}	t_hdoc_pack;
 
 /* ===================== SHELL STATE (LEGACY) ===================== */
 typedef struct s_shell_state
@@ -145,7 +156,6 @@ typedef struct s_shell_state
 }	t_shell_state;
 
 /* ===================== UTILITY FUNCTIONS ===================== */
-
 // List utilities
 int		append_to_list(t_list **list, char *s);
 int		list_length(t_list *list);
@@ -182,9 +192,11 @@ int		get_quoted_str(char *line, int i, char **out);
 int		append_part(char **word, char *part);
 int		has_unclosed_quote(const char *line);
 int		validate_tokens(t_token *tokens, t_data *data);
-int		process_token(t_token *tok, t_data *data, t_syntax_state *state);
+int		process_token(t_token *tok, t_data *data,
+			t_syntax_state *state);
 void	store_word(t_syntax_state *state);
-int		handle_redir(t_token *tok, t_data *data, t_syntax_state *state);
+int		handle_redir(t_token *tok, t_data *data,
+			t_syntax_state *state);
 int		handle_pipe(t_token *tok, t_data *data, int has_cmd,
 			int pending_redir);
 int		handle_pipe_token(t_token **head, char *line, int i);
@@ -226,7 +238,6 @@ int		ft_pwd(void);
 int		ft_env(char **envp);
 int		ft_cd(char **args, t_list **env);
 int		ft_export(char **str, t_list **env);
-// int		exec_unset(char **argv, t_shell_state *state);
 void	ft_exit(t_data *data, char **args);
 int		ft_unset(char **argv, t_list **env);
 
@@ -237,7 +248,7 @@ char	*create_env_var_string(char *key, char *value);
 int		handle_cd_with_path(char *path);
 bool	export(char *str, t_list **env);
 
-// Builtin wrappers for execution
+// Builtin wrappers
 int		builtin_cd(t_data *shell, t_cmd *command);
 int		builtin_pwd(void);
 int		builtin_export(t_data *shell, t_cmd *command);
@@ -258,9 +269,10 @@ char	*find_cmd(t_data *data, char *cmd);
 
 // Heredoc
 int		handle_heredoc(char *delimiter, bool expand, t_data *data);
-char    *create_heredoc_filename(void);
-char    **setup_heredoc_env(bool expand, t_data *data);
-int     finish_heredoc(int fd, char *filename);
+char	*create_heredoc_filename(void);
+char	**setup_heredoc_env(bool expand, t_data *data);
+int		finish_heredoc(int fd, char *filename);
+
 // Shell execution flow
 bool	shell_parse_line(t_data *data, char *line);
 bool	shell_exec(t_data *data);
@@ -276,7 +288,7 @@ int		ms_get_exit_status(t_data *data);
 void	free_token(t_token **list);
 void	free_cmds(t_cmd **cmds);
 
-/* ===================== ERROR MSGS MANAGEMENT ===================== */
+/* ===================== ERROR MSGS ===================== */
 void	err_prefix(void);
 void	err_prefix_subject(char *subject);
 void	err_cmd_not_found(char *cmd);
@@ -296,21 +308,61 @@ void	err_allocation(void);
 void	err_env_init(void);
 void	dispatch_system_errors(t_error_type type, char *subject,
 			char *detail, int errnum);
-int		handle_primary_errors(t_error_type type, char *subject, char *detail);
+int		handle_primary_errors(t_error_type type, char *subject,
+			char *detail);
 int		handle_cd_to_home(t_list *env);
 int		cd_change_directory(char **args, t_list **env, char *old_pwd);
 char	*get_home_from_env_list(t_list *env);
 
-int		cleanup_heredoc(int fd, char *filename, char **env_arr, int return_val);
-bool	read_heredoc_input(int fd, char *delimiter, t_heredoc_args *args);
+int		cleanup_heredoc(int fd, char *filename, char **env_arr,
+			int return_val);
+bool	read_heredoc_input(int fd, char *delimiter,
+			t_heredoc_args *args);
 bool	process_heredoc_line(int fd, char *line, t_heredoc_args *args);
 
 void	restore_signals(struct sigaction *old_int,
-	struct sigaction *old_quit);
+			struct sigaction *old_quit);
 void	set_heredoc_signals(struct sigaction *old_int,
-		struct sigaction *old_quit);
+			struct sigaction *old_quit);
 void	heredoc_sigint(int signo);
-char	*expand_heredoc_line(char *line, bool expand,
-	char **env_arr, t_data *data);
+char	*expand_heredoc_line(char *line, bool expand, char **env_arr,
+			t_data *data);
 
+// --- maram
+bool	export_no_args(t_list *env);
+bool	valid_identifier(char *str);
+int		get_var_name_len(char *str);
+int		handle_no_args(t_list **env);
+t_list	*find_env_var(t_list *env, char *key);
+int		update_env_var(t_list **env, char *key, char *value);
+bool	prepare_assignments(t_data *data);
+void	wait_all(t_data *data, pid_t last_pid);
+bool	exec_cmd(t_data *data, t_cmd *cmd, int *pip, pid_t *out_pid);
+void	heredoc_child(int fd, char *delimiter, t_heredoc_args *args);
+int		run_heredoc_child(char *delimiter, t_heredoc_args *args);
+bool	cmd_exist(char **path, t_data *data, char *cmd);
+void	redirect_in_out(t_data *data, t_cmd *cmd, int *pip);
+bool	handle_single_dot(t_data *data, char **argv);
+void	child_exit(t_data *data, char *path, char **env, int status);
+bool	report_exec_error(char *path, t_data *data, int code);
+bool	check_dir(char *path, t_data *data);
+char	*cmd_not_found(char *cmd, int path_missing);
+void	restore_stdio(int *stdin_backup, int *stdout_backup);
+void	exec_builtin_dispatch(int *stdin_backup, int *stdout_backup,
+			t_data *shell, t_cmd *command);
+
+char	**create_new_argv(char **old_argv, int argc);
+int		get_argc(char **argv);
+char	*expand_redir_word(t_token *tok, t_data *data, int type,
+			bool *expand_delim);
+void	update_cmd_fds(t_cmd *cmd, int type, int fd);
+char	*prepare_redir_name(t_token *tok, t_data *data, int type,
+			bool *expand_delim);
+int		open_redir_fd(int type, char *name, bool expand_delim,
+			t_data *data);
+int		open_redir_file(int type, char *name);
+int		validate_redir_target(t_cmd *cmd, t_token *tok,
+			t_data *data);
+bool	delimiter_should_expand(char *word);
+int		handle_dollar(char *word, int index, t_expand *exp);
 #endif

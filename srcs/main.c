@@ -30,28 +30,36 @@ static int	make_env2(t_data *data)
 	return (1);
 }
 
+static int	add_env_entry(t_data *data, char *env_str)
+{
+	char	*tmp;
+
+	tmp = ft_strdup(env_str);
+	if (tmp == NULL)
+	{
+		free_env_list(&data->env);
+		return (0);
+	}
+	if (!append_to_list(&data->env, tmp))
+	{
+		free(tmp);
+		free_env_list(&data->env);
+		return (0);
+	}
+	return (1);
+}
+
 static int	init_shell_env(t_data *data, char **envp)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
 	if (envp == NULL || envp[0] == NULL)
 		return (make_env2(data));
 	while (envp[i] != NULL)
 	{
-		tmp = ft_strdup(envp[i]);
-		if (tmp == NULL)
-		{
-			free_env_list(&data->env);
+		if (!add_env_entry(data, envp[i]))
 			return (0);
-		}
-		if (!append_to_list(&data->env, tmp))
-		{
-			free(tmp);
-			free_env_list(&data->env);
-			return (0);
-		}
 		i = i + 1;
 	}
 	return (1);

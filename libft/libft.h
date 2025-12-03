@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 11:43:17 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/01/13 19:16:03 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 15:49:58 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <limits.h>
 # include <stdint.h>
+
 int		ft_atoi(const char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t count, size_t size);

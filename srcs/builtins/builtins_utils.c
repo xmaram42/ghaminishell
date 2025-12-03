@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 13:38:03 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/10/14 17:28:01 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 00:11:46 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-This function checks if the provided name is a valid environment variable name.
-*/
+
 int	is_valid_env_var_name(char *name)
 {
 	int	i;

@@ -20,14 +20,9 @@ void	store_word(t_syntax_state *state)
 		state->has_cmd = 1;
 }
 
-int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
+static int	check_invalid_tokens(t_token *tok, t_data *data)
 {
-	if (tok->type == TOK_SEMICOLON)
-	{
-		syntax_error(data, tok->str);
-		return (0);
-	}
-	if (tok->type == TOK_AND)
+	if (tok->type == TOK_SEMICOLON || tok->type == TOK_AND)
 	{
 		syntax_error(data, tok->str);
 		return (0);
@@ -41,6 +36,13 @@ int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
 			syntax_error(data, tok->str);
 		return (0);
 	}
+	return (1);
+}
+
+int	process_token(t_token *tok, t_data *data, t_syntax_state *state)
+{
+	if (!check_invalid_tokens(tok, data))
+		return (0);
 	if (tok->type == TOK_PIPE)
 	{
 		if (!handle_pipe(tok, data, state->has_cmd, state->pending_redir))

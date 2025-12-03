@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:13:50 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/24 19:42:06 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 15:36:19 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,16 @@ int	shell_step(t_data *data)
 	return (1);
 }
 
-
 void	shell_teardown(t_data *data)
 {
-	rl_clear_history();
+	clear_history();
 	free_cmds(&data->cmds);
 	free_token(&data->token);
 	if (data->env != NULL)
 		free_env_list(&data->env);
+}
+
+void	shell_cleanup(t_data *data)
+{
+	(void)data;
 }

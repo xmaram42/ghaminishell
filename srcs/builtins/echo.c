@@ -3,28 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:54:41 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 18:08:52 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 00:23:32 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo(char **args)
+static int	parse_n_flags(char **args)
 {
 	int	i;
-	int	newline_flag;
 	int	j;
+	int	newline_flag;
 
 	i = 1;
 	newline_flag = 1;
-	if (!args[1])
-	{
-		printf("\n");
-		return (0);
-	}
 	while (args[i] && args[i][0] == '-' && args[i][1])
 	{
 		j = 1;
@@ -35,6 +30,23 @@ int	ft_echo(char **args)
 		newline_flag = 0;
 		i++;
 	}
+	return (newline_flag << 16 | i);
+}
+
+int	ft_echo(char **args)
+{
+	int	i;
+	int	newline_flag;
+	int	result;
+
+	if (!args[1])
+	{
+		printf("\n");
+		return (0);
+	}
+	result = parse_n_flags(args);
+	newline_flag = result >> 16;
+	i = result & 0xFFFF;
 	while (args[i])
 	{
 		printf("%s", args[i]);
@@ -46,4 +58,3 @@ int	ft_echo(char **args)
 		printf("\n");
 	return (0);
 }
-

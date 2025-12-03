@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:07:42 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 14:11:51 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 00:23:54 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	update_env_var(t_list **env, char *key, char *value)
-{
-	char	*new_var;
-	t_list	*tmp;
-
-	if (!env || !key || !value)
-		return (1);
-	new_var = create_env_var_string(key, value);
-	if (!new_var)
-		return (1);
-	tmp = *env;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->str, key, ft_strlen(key))
-			== 0 && tmp->str[ft_strlen(key)] == '=')
-		{
-			free(tmp->str);
-			tmp->str = new_var;
-			return (0);
-		}
-		tmp = tmp->next;
-		if (tmp == *env)
-			break ;
-	}
-	if (append_to_list(env, new_var))
-		return (0);
-	return (1);
-}
 
 int	handle_cd_with_path(char *path)
 {
@@ -67,6 +38,25 @@ char	*get_home_from_env_list(t_list *env)
 	return (NULL);
 }
 
+static int	get_current_dir(char *pwd)
+{
+	if (!getcwd(pwd, PATH_MAX))
+	{
+		error_type_msg(ERR_GENERAL, "cd", "getcwd", errno);
+		return (1);
+	}
+	return (0);
+}
+
+static int	update_pwd_vars(t_list **env, char *old_pwd, char *new_pwd)
+{
+	if (update_env_var(env, "OLDPWD", old_pwd))
+		return (1);
+	if (update_env_var(env, "PWD", new_pwd))
+		return (1);
+	return (0);
+}
+
 int	ft_cd(char **args, t_list **env)
 {
 	char	old_pwd[PATH_MAX];
@@ -77,21 +67,11 @@ int	ft_cd(char **args, t_list **env)
 		error_type_msg(ERR_ENV_NOT_SET, "cd", NULL, 0);
 		return (1);
 	}
-	if (!getcwd(old_pwd, PATH_MAX))
-	{
-		error_type_msg(ERR_GENERAL, "cd", "getcwd", errno);
+	if (get_current_dir(old_pwd))
 		return (1);
-	}
 	if (cd_change_directory(args, env, old_pwd))
 		return (1);
-	if (!getcwd(new_pwd, PATH_MAX))
-	{
-		error_type_msg(ERR_GENERAL, "cd", "getcwd", errno);
+	if (get_current_dir(new_pwd))
 		return (1);
-	}
-	if (update_env_var(env, "OLDPWD", old_pwd))
-		return (1);
-	if (update_env_var(env, "PWD", new_pwd))
-		return (1);
-	return (0);
+	return (update_pwd_vars(env, old_pwd, new_pwd));
 }

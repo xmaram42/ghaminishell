@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 16:28:31 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/10/13 16:46:27 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 00:21:21 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	ft_env(char **envp)
 {
-    int	i;
+	int	i;
 
-    if (!envp)
-        return (1);
-    i = 0;
-    while (envp[i])
-    {
-        printf("%s\n", envp[i]);
-        i++;
-    }
-    return (0);
+	if (!envp)
+		return (1);
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+	return (0);
 }

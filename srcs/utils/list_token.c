@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 11:36:17 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/11 19:55:02 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:37:15 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ static int	token_new_element(t_token **new, char *str, int type)
 	(*new)->prev = NULL;
 	return (1);
 }
-/*the function above puts shows how a new element is tokenized, allocating
-an malloced string and the type of token it is, ensuring theres nothing
-before or after it*/
 
 static void	add_first(t_token **list, t_token *new)
 {
@@ -38,8 +35,6 @@ static void	add_first(t_token **list, t_token *new)
 	(*list)->prev = *list;
 	(*list)->next = *list;
 }
-//When list is empty, create a circular doubly linked list with the
-//new node pointing to itself as both next and prev.
 
 int	append_token(t_token **list, char *str, int type)
 {
@@ -58,9 +53,6 @@ int	append_token(t_token **list, char *str, int type)
 	}
 	return (1);
 }
-/*Add a new token to the list. If empty → call add_first.
-   Else → insert new token at the end (before head), fixing next/prev links.
-   Returns 1 on success. */
 
 void	free_token(t_token **list)
 {
@@ -83,6 +75,3 @@ void	free_token(t_token **list)
 	}
 	*list = NULL;
 }
-
-//Free the entire circular token list, including each token string.
-//Resets list pointer to NULL to avoid dangling reference.

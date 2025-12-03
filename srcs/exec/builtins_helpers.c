@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_helpers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 18:29:29 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/19 17:31:47 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:35:22 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,13 @@ bool	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, ":"))
 		return (true);
 	return (false);
+}
+
+char	*cmd_not_found(char *cmd, int path_missing)
+{
+	if (path_missing)
+		error_type_msg(ERR_NO_SUCH_FILE, cmd, NULL, 0);
+	else
+		error_type_msg(ERR_CMD_NOT_FOUND, cmd, NULL, 0);
+	return (NULL);
 }

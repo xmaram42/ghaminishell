@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_finder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:00:00 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/24 17:41:36 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/01 15:26:42 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,8 @@ static char	*get_paths(t_list *env)
 	return (NULL);
 }
 
-static char	*cmd_not_found(char *cmd, int path_missing)
+static char	*handle_empty_or_absolute(char *cmd)
 {
-	if (path_missing)
-		error_type_msg(ERR_NO_SUCH_FILE, cmd, NULL, 0);
-	else
-		error_type_msg(ERR_CMD_NOT_FOUND, cmd, NULL, 0);
-	return (NULL);
-}
-
-char	*find_cmd(t_data *data, char *cmd)
-{
-	char	*path_str;
-	char	**paths;
-	char	*full_path;
-
 	if (!cmd || cmd[0] == '\0')
 	{
 		if (cmd)
@@ -72,6 +59,15 @@ char	*find_cmd(t_data *data, char *cmd)
 	}
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
+	return (NULL);
+}
+
+static char	*search_cmd_in_paths(t_data *data, char *cmd)
+{
+	char	*path_str;
+	char	**paths;
+	char	*full_path;
+
 	path_str = get_paths(data->env);
 	if (!path_str || *path_str == '\0')
 		return (cmd_not_found(cmd, 1));
@@ -80,6 +76,18 @@ char	*find_cmd(t_data *data, char *cmd)
 		return (NULL);
 	full_path = search_in_path(cmd, paths);
 	free_array(paths);
+	return (full_path);
+}
+
+char	*find_cmd(t_data *data, char *cmd)
+{
+	char	*result;
+	char	*full_path;
+
+	result = handle_empty_or_absolute(cmd);
+	if (result)
+		return (result);
+	full_path = search_cmd_in_paths(data, cmd);
 	if (full_path)
 		return (full_path);
 	return (cmd_not_found(cmd, 0));

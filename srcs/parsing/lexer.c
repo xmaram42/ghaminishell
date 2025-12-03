@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: deep <deep@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:09:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/24 18:45:38 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/11/30 23:56:45 by deep             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,26 @@ int	handle_word_with_error(t_token **head, char *line, int i)
 	return (i);
 }
 
+static int	process_special_char(t_token **head, char *line, int i)
+{
+	if (line[i] == '|')
+		return (handle_pipe_token(head, line, i));
+	else if (line[i] == '&')
+		return (handle_and_token(head, line, i));
+	else if (line[i] == '<')
+		return (handle_redir_in(head, line, i));
+	else if (line[i] == '>')
+		return (handle_redir_out(head, line, i));
+	else if (line[i] == '(' || line[i] == ')')
+		return (handle_parenthesis(head, line, i));
+	else if (line[i] == ';')
+	{
+		add_token_back(head, new_token(ft_strdup(";"), TOK_SEMICOLON));
+		return (i + 1);
+	}
+	return (handle_word_with_error(head, line, i));
+}
+
 t_token	*lexer(char *line)
 {
 	t_token	*head;
@@ -61,29 +81,12 @@ t_token	*lexer(char *line)
 	{
 		if (line[i] == ' ' || line[i] == '\t')
 			i++;
-		else if (line[i] == '|')
-			i = handle_pipe_token(&head, line, i);
-		else if (line[i] == '&')
-			i = handle_and_token(&head, line, i);
-		else if (line[i] == '<')
-			i = handle_redir_in(&head, line, i);
-		else if (line[i] == '>')
-			i = handle_redir_out(&head, line, i);
-		else if (line[i] == '(' || line[i] == ')')
-			i = handle_parenthesis(&head, line, i);
-		else if (line[i] == ';')
-		{
-			add_token_back(&head,
-				new_token(ft_strdup(";"), TOK_SEMICOLON));
-			i++;
-		}
 		else
 		{
-			i = handle_word_with_error(&head, line, i);
+			i = process_special_char(&head, line, i);
 			if (i == -1)
 				return (NULL);
 		}
 	}
 	return (head);
 }
- 

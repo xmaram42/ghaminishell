@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 10:20:46 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/25 14:33:24 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:37:08 by maram            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	heredoc_sigint(int signo)
 	(void)signo;
 	write(STDOUT_FILENO, "\n", 1);
 }
-
 
 void	set_heredoc_signals(struct sigaction *old_int,
 				struct sigaction *old_quit)
