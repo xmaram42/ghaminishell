@@ -67,16 +67,20 @@ void	free_env_list(t_list **list)
 {
 	t_list	*cur;
 	t_list	*next;
+	t_list	*head;
 
 	if (!list || !*list)
 		return ;
 
-	cur = *list;
-	while (cur)
+	head = *list;
+	cur = head;
+	while (1)
 	{
 		next = cur->next;
 		free(cur->str);
 		free(cur);
+		if (!next || next == head)
+			break;
 		cur = next;
 	}
 	*list = NULL;
