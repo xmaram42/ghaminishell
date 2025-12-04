@@ -14,19 +14,29 @@
 
 pid_t	g_signal_pid;
 
-static int	make_env2(t_data *data)
+static int      make_env2(t_data *data)
 {
-	char	path[PATH_MAX];
-	char	*tmp;
+	char    path[PATH_MAX];
+	char    *tmp;
 
 	tmp = ft_strdup("OLDPWD");
 	if (!tmp || !append_to_list(&data->env, tmp))
+	{
+		free_env_list(&data->env);
 		return (0);
+	}
 	if (getcwd(path, PATH_MAX) == NULL)
+	{
+		free_env_list(&data->env);
 		return (0);
+	}
 	tmp = ft_strjoin("PWD=", path);
 	if (!tmp || !append_to_list(&data->env, tmp))
+	{
+		free(tmp);
+		free_env_list(&data->env);
 		return (0);
+	}
 	return (1);
 }
 
@@ -55,11 +65,21 @@ static int	init_shell_env(t_data *data, char **envp)
 
 	i = 0;
 	if (envp == NULL || envp[0] == NULL)
-		return (make_env2(data));
+	{
+		if (!make_env2(data))
+		{
+			free_env_list(&data->env);
+			return (0);
+		}
+		return (1);
+	}
 	while (envp[i] != NULL)
 	{
 		if (!add_env_entry(data, envp[i]))
+		{
+			free_env_list(&data->env);
 			return (0);
+		}
 		i = i + 1;
 	}
 	return (1);

@@ -65,23 +65,20 @@ int	list_length(t_list *list)
 
 void	free_env_list(t_list **list)
 {
-	t_list	*head;
 	t_list	*cur;
 	t_list	*next;
 
-	if (list == NULL || *list == NULL)
+	if (!list || !*list)
 		return ;
-	head = *list;
-	head->prev->next = NULL;
-	head->prev = NULL;
-	cur = head;
-	while (cur != NULL)
+
+	cur = *list;
+	while (cur)
 	{
 		next = cur->next;
-		if (cur->str)
-			free(cur->str);
+		free(cur->str);
 		free(cur);
 		cur = next;
 	}
 	*list = NULL;
 }
+

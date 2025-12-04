@@ -43,9 +43,8 @@ static void	start_new_cmd(t_cmd **cmds, t_cmd **current)
 
 static void	parser_process_token(t_cmd *current, t_token **tokens, t_data *data)
 {
-	if ((*tokens)->type == TOK_PIPE)
-		start_new_cmd(NULL, &current);
-	else if (is_redir((*tokens)->type))
+
+	if (is_redir((*tokens)->type))
 	{
 		parse_redir(current, *tokens, data);
 		*tokens = (*tokens)->next;

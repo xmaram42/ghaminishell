@@ -20,14 +20,17 @@ static int	matches_var_name(char *str, char *name, int name_len)
 	return (0);
 }
 
-static void	remove_node(t_list **env, t_list *current, t_list *prev)
+static void remove_node(t_list **env, t_list *current, t_list *prev)
 {
-	if (prev)
-		prev->next = current->next;
-	else
-		*env = current->next;
-	free(current->str);
-	free(current);
+    if (current->next)
+        current->next->prev = prev;
+    if (prev)
+        prev->next = current->next;
+    else
+        *env = current->next;
+
+    free(current->str);
+    free(current);
 }
 
 static void	remove_env_node(t_list **env, char *name)
