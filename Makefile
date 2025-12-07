@@ -44,6 +44,7 @@ SRCS := srcs/main.c \
 		srcs/parsing/lexer_quotes_2.c \
 		srcs/parsing/readline_utils.c \
 		srcs/parsing/expander.c \
+		srcs/parsing/expand_loop.c \
 		srcs/parsing/expanderr.c \
 		srcs/parsing/expande_tilde.c \
 		srcs/parsing/expander_utils.c \
@@ -62,7 +63,6 @@ SRCS := srcs/main.c \
 		srcs/builtins/export/export_utils.c \
 		srcs/builtins/export/export_utils1.c\
  		srcs/builtins/builtins_utils.c \
-		srcs/builtins/colon.c \
 
 OBJS := $(SRCS:.c=.o)
 
@@ -72,8 +72,8 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 LIBFT_INC   := -I$(LIBFT_DIR)
 
 # --- Readline (macOS Homebrew) ---
-READLINE_INC := -I/opt/homebrew/opt/readline/include
-READLINE_LIB := -L/opt/homebrew/opt/readline/lib -lreadline
+READLINE_INC :=-I/opt/vagrant/embedded/include
+READLINE_LIB :=-L/opt/vagrant/embedded/lib -lreadline
 
 INCS        := -I. $(LIBFT_INC) $(READLINE_INC)
 

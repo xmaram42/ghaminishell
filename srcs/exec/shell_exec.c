@@ -49,6 +49,7 @@ bool	shell_parse_line(t_data *data, char *line)
 	if (!data->cmds)
 	{
 		free_token(&tokens);
+		data->token = NULL;
 		return (false);
 	}
 	return (true);

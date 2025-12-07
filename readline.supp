@@ -1,14 +1,146 @@
+# ========================================
+# Readline Library Suppressions
+# All "still reachable" memory from system libraries
+# ========================================
+
 {
-    leak readline
-    Memcheck:Leak 
+    readline_general
+    Memcheck:Leak
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_init
+    Memcheck:Leak
     ...
     fun:readline
 }
+
 {
-    leak add_history
+    readline_xmalloc
+    Memcheck:Leak
+    ...
+    fun:xmalloc
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_xrealloc
+    Memcheck:Leak
+    ...
+    fun:xrealloc
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_add_history
     Memcheck:Leak
     ...
     fun:add_history
+}
+
+{
+    readline_rl_initialize
+    Memcheck:Leak
+    ...
+    fun:rl_initialize
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_keymaps
+    Memcheck:Leak
+    ...
+    fun:rl_make_bare_keymap
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_funmap
+    Memcheck:Leak
+    ...
+    fun:rl_add_funmap_entry
+    ...
+    obj:*/libreadline.so*
+}
+
+{
+    readline_display
+    Memcheck:Leak
+    ...
+    fun:rl_redisplay
+    ...
+    obj:*/libreadline.so*
+}
+
+# ========================================
+# Ncurses/Tinfo Library Suppressions
+# ========================================
+
+{
+    tinfo_general
+    Memcheck:Leak
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_setupterm
+    Memcheck:Leak
+    ...
+    fun:_nc_setupterm
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_read_termtype
+    Memcheck:Leak
+    ...
+    fun:_nc_read_termtype
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_read_entry
+    Memcheck:Leak
+    ...
+    fun:_nc_read_entry2
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_first_db
+    Memcheck:Leak
+    ...
+    fun:_nc_first_db
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_tgetent
+    Memcheck:Leak
+    ...
+    fun:tgetent_sp
+    ...
+    obj:*/libtinfo.so*
+}
+
+{
+    tinfo_find_type
+    Memcheck:Leak
+    ...
+    fun:_nc_find_type_entry
+    ...
+    obj:*/libtinfo.so*
 }
 {
     macos_mach_msg_uninit

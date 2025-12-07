@@ -61,6 +61,11 @@ int	cd_change_directory(char **args, t_list **env, char *old_pwd)
 		if (handle_cd_to_home(*env))
 			return (1);
 	}
+	else if (args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		error_type_msg(ERR_OLDPWD_NOT_SET, "cd", NULL, 0);

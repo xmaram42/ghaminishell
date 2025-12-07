@@ -6,13 +6,13 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:08:58 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/12/03 13:53:17 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/05 16:31:25 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	process_dollar(char *word, t_expand *exp)
+int	process_dollar(char *word, t_expand *exp)
 {
 	int	next;
 
@@ -25,7 +25,7 @@ static int	process_dollar(char *word, t_expand *exp)
 	return (1);
 }
 
-static bool	handle_marker(char *word, int *index, bool *in_single)
+bool	handle_marker(char *word, int *index, bool *in_single)
 {
 	if (word[*index] == SQ_MARKER)
 	{
@@ -41,42 +41,12 @@ static bool	handle_marker(char *word, int *index, bool *in_single)
 	return (false);
 }
 
-static int	handle_regular_char(char *word, t_expand *exp)
+int	handle_regular_char(char *word, t_expand *exp)
 {
 	if (append_part(&exp->result, ft_substr(word, exp->index, 1)) == -1)
 		return (-1);
 	exp->index++;
 	return (0);
-}
-
-static char	*expand_loop(char *word, char **envp, int last_exit)
-{
-	t_expand	exp;
-	int			status;
-	int prev_index;
-
-	exp.result = ft_strdup("");
-	if (!exp.result)
-		return (NULL);
-	exp.index = 0;
-	exp.in_single = false;
-	exp.last_exit = last_exit;
-	exp.envp = envp;
-	while (word[exp.index])
-	{
-		prev_index = exp.index;
-		if (!handle_marker(word, &exp.index, &exp.in_single))
-		{
-			status = process_dollar(word, &exp);
-			if (status == -1)
-				return (free(exp.result), NULL);
-			if (status == 0 && handle_regular_char(word, &exp) == -1)
-				return (free(exp.result), NULL);
-		}
-		if (exp.index == prev_index)
-		    exp.index++;
-	}
-	return (exp.result);
 }
 
 char	*expand_value(char *word, char **envp, int last_exit)

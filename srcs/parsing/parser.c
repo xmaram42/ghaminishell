@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:34:44 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/20 13:59:33 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/05 16:26:59 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	start_new_cmd(t_cmd **cmds, t_cmd **current)
 
 static void	parser_process_token(t_cmd *current, t_token **tokens, t_data *data)
 {
-
 	if (is_redir((*tokens)->type))
 	{
 		parse_redir(current, *tokens, data);

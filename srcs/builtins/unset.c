@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:50:15 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/12/01 00:17:52 by maram            ###   ########.fr       */
+/*   Updated: 2025/12/05 16:15:42 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,38 +20,39 @@ static int	matches_var_name(char *str, char *name, int name_len)
 	return (0);
 }
 
-static void remove_node(t_list **env, t_list *current, t_list *prev)
+static void	remove_node(t_list **env, t_list *current)
 {
-    if (current->next)
-        current->next->prev = prev;
-    if (prev)
-        prev->next = current->next;
-    else
-        *env = current->next;
-
-    free(current->str);
-    free(current);
+	if (current->next == current)
+	{
+		*env = NULL;
+		free(current->str);
+		free(current);
+		return ;
+	}
+	current->next->prev = current->prev;
+	current->prev->next = current->next;
+	if (current == *env)
+		*env = current->next;
+	free(current->str);
+	free(current);
 }
 
 static void	remove_env_node(t_list **env, char *name)
 {
 	t_list	*current;
-	t_list	*prev;
 	int		name_len;
 
 	if (!env || !*env || !name)
 		return ;
 	name_len = ft_strlen(name);
 	current = *env;
-	prev = NULL;
 	while (1)
 	{
 		if (matches_var_name(current->str, name, name_len))
 		{
-			remove_node(env, current, prev);
+			remove_node(env, current);
 			return ;
 		}
-		prev = current;
 		current = current->next;
 		if (current == *env)
 			break ;

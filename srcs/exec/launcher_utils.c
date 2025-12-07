@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launcher_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:27:30 by maram             #+#    #+#             */
-/*   Updated: 2025/12/01 15:28:56 by maram            ###   ########.fr       */
+/*   Updated: 2025/12/05 17:27:08 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	exec_builtin_part2(char *command_name, t_data *shell,
 	else if (strings_equal(command_name, "clear"))
 		ms_set_exit_status(shell, clear_builtin());
 	else if (strings_equal(command_name, ":"))
-		ms_set_exit_status(shell, builtin_colon(command));
+		ms_set_exit_status(shell, 0);
 	else if (strings_equal(command_name, "exit"))
 	{
 		restore_stdio(&stdio_backup[0], &stdio_backup[1]);

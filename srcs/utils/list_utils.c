@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:06:51 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/11/20 13:56:06 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/05 17:31:17 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	free_env_list(t_list **list)
 
 	if (!list || !*list)
 		return ;
-
 	head = *list;
 	cur = head;
 	while (1)
@@ -80,9 +79,8 @@ void	free_env_list(t_list **list)
 		free(cur->str);
 		free(cur);
 		if (!next || next == head)
-			break;
+			break ;
 		cur = next;
 	}
 	*list = NULL;
 }
-

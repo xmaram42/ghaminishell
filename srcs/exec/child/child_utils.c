@@ -18,8 +18,8 @@ static void	child_cleanup(t_data *data)
 		free_cmds(&data->cmds);
 	if (data->token)
 		free_token(&data->token);
-	// if (data->env)
-	// 	free_env_list(&data->env);
+	if (data->env)
+		free_env_list(&data->env);
 }
 
 bool	handle_single_dot(t_data *data, char **argv)

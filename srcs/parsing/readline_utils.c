@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+#include "minishell.h"
+
 static int	append_chunk(char **line, char *next)
 {
 	char	*tmp;
@@ -52,7 +54,13 @@ char	*read_full_line(void)
 {
 	char	*line;
 
+	g_signal_pid = 0;
 	line = readline("lolipop 🍭$ ");
+	if (g_signal_pid == 1)
+	{
+		g_signal_pid = 0;
+		return (ft_strdup(""));
+	}
 	if (!line)
 	{
 		ft_putendl_fd("exit", 1);

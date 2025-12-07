@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:13:50 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/12/01 15:36:19 by maram            ###   ########.fr       */
+/*   Updated: 2025/12/05 16:21:43 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@ static void	ms_clear_step(t_data *data)
 		free_token(&data->token);
 }
 
-int	shell_step(t_data *data)
+static int	handle_empty_or_signal(char *line, t_data *data)
 {
-	char	*line;
-
-	line = read_full_line();
 	if (line == NULL)
 	{
+		if (g_signal_pid)
+		{
+			g_signal_pid = 0;
+			return (1);
+		}
+		ft_putendl_fd("exit", 1);
 		data->exit_flag = 1;
 		return (0);
 	}
@@ -35,6 +38,18 @@ int	shell_step(t_data *data)
 		free(line);
 		return (1);
 	}
+	return (-1);
+}
+
+int	shell_step(t_data *data)
+{
+	char	*line;
+	int		status;
+
+	line = read_full_line();
+	status = handle_empty_or_signal(line, data);
+	if (status != -1)
+		return (status);
 	add_history(line);
 	if (shell_parse_line(data, line) != 0)
 		(void)shell_exec(data);
@@ -52,9 +67,4 @@ void	shell_teardown(t_data *data)
 	free_token(&data->token);
 	if (data->env != NULL)
 		free_env_list(&data->env);
-}
-
-void	shell_cleanup(t_data *data)
-{
-	(void)data;
 }

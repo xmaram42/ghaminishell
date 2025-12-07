@@ -6,7 +6,7 @@
 /*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/12/03 12:25:32 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/05 17:34:49 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@
 # include <sys/wait.h>
 # include <limits.h>
 # include <termios.h>
-
-/* ===================== GLOBAL VARIABLE ===================== */
+extern int rl_done;
 extern pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
@@ -226,6 +225,10 @@ char	*extract_var_name(char *str, int start);
 char	*expand_tilde(char *word, char **envp);
 char	*ft_free_first_str(char *s1, char *s2);
 char	*strip_markers(const char *word);
+bool	handle_marker(char *word, int *index, bool *in_single);
+int		process_dollar(char *word, t_expand *exp);
+int		handle_regular_char(char *word, t_expand *exp);
+char	*expand_loop(char *word, char **envp, int last_exit);
 
 // Input handling
 char	*read_full_line(void);
@@ -258,8 +261,6 @@ int		builtin_echo(t_cmd *command);
 int		clear_builtin(void);
 bool	launch_builtin(t_data *shell, t_cmd *command);
 bool	is_builtin(char *cmd);
-int		builtin_colon(t_cmd *command);
-
 /* ===================== EXECUTION FUNCTIONS ===================== */
 
 // Pipeline execution
@@ -278,8 +279,6 @@ bool	shell_parse_line(t_data *data, char *line);
 bool	shell_exec(t_data *data);
 int		shell_step(t_data *data);
 void	shell_teardown(t_data *data);
-void	shell_cleanup(t_data *data);
-
 // Exit status management
 void	ms_set_exit_status(t_data *data, int status);
 int		ms_get_exit_status(t_data *data);

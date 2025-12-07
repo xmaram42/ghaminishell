@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maram <maram@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:39 by maram             #+#    #+#             */
-/*   Updated: 2025/12/01 00:13:06 by maram            ###   ########.fr       */
+/*   Updated: 2025/12/05 16:14:10 by aalbugar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static int	exist(char *str, t_list *env)
 
 static bool	update_existing_var(t_list **env, int pos, char *value)
 {
-	int	i;
-	t_list *node;
+	int		i;
+	t_list	*node;
 
 	if (!env || !*env)
 	{
@@ -58,7 +58,7 @@ static bool	update_existing_var(t_list **env, int pos, char *value)
 	i = 0;
 	node = *env;
 	while (i++ < pos && node->next)
-	    node = node->next; 
+		node = node->next;
 	free((node->str));
 	node->str = value;
 	return (true);
