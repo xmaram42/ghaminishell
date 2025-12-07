@@ -24,9 +24,9 @@ static int	handle_empty_or_signal(char *line, t_data *data)
 {
 	if (line == NULL)
 	{
-		if (g_sigint_received)
+		if (g_signal_pid)
 		{
-			g_sigint_received = 0;
+			g_signal_pid = 0;
 			return (1);
 		}
 		ft_putendl_fd("exit", 1);

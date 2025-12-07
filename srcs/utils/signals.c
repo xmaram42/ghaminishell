@@ -12,13 +12,14 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t	g_sigint_received = 0;
-
 static void	handle_sigint(int signo)
 {
 	(void)signo;
-	g_sigint_received = 1;
+	g_signal_pid = 1;
 	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void	setup_parent_signals(void)
