@@ -72,8 +72,8 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 LIBFT_INC   := -I$(LIBFT_DIR)
 
 # --- Readline (macOS Homebrew) ---
-READLINE_INC :=-I/opt/vagrant/embedded/include
-READLINE_LIB :=-L/opt/vagrant/embedded/lib -lreadline
+READLINE_INC := 
+READLINE_LIB := -lreadline
 
 INCS        := -I. $(LIBFT_INC) $(READLINE_INC)
 

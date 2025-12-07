@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-#include "minishell.h"
-
 static int	append_chunk(char **line, char *next)
 {
 	char	*tmp;
@@ -42,6 +40,12 @@ static int	read_continuation(char **line)
 	next = readline("> ");
 	if (!next)
 	{
+		if (g_sigint_received)
+		{
+			free(*line);
+			*line = NULL;
+			return (0);
+		}
 		error_type_msg(ERR_UNCLOSED_QUOTE, NULL, NULL, 0);
 		free(*line);
 		*line = NULL;
@@ -54,17 +58,13 @@ char	*read_full_line(void)
 {
 	char	*line;
 
-	g_signal_pid = 0;
 	line = readline("lolipop 🍭$ ");
-	if (g_signal_pid == 1)
-	{
-		g_signal_pid = 0;
-		return (ft_strdup(""));
-	}
 	if (!line)
-	{
-		ft_putendl_fd("exit", 1);
 		return (NULL);
+	if (line[0] == '\0')
+	{
+		free(line);
+		return (ft_strdup(""));
 	}
 	while (has_unclosed_quote(line))
 		if (!read_continuation(&line))

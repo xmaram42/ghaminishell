@@ -11,6 +11,29 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	pars_word(t_cmd *cmd, t_token *tok, t_data *data)
+{
+	int		argc;
+	char	**new_argv;
+	char	*expanded;
+	char	**env_arr;
+
+	argc = get_argc(cmd->argv);
+	new_argv = create_new_argv(cmd->argv, argc);
+	if (!new_argv)
+		return ;
+	env_arr = lst_to_arr(data->env);
+	expanded = expand_value(tok->str, env_arr, data->exit_code);
+	free_array(env_arr);
+	if (expanded)
+		new_argv[argc] = expanded;
+	else
+		new_argv[argc] = ft_strdup(tok->str);
+	new_argv[argc + 1] = NULL;
+	free(cmd->argv);
+	cmd->argv = new_argv;
+}
 /*
 ** Free a linked list of commands and their argv.
 */

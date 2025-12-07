@@ -28,8 +28,10 @@
 # include <sys/wait.h>
 # include <limits.h>
 # include <termios.h>
-extern int rl_done;
-extern pid_t	g_signal_pid;
+
+/* ===================== GLOBAL VARIABLE ===================== */
+extern pid_t					g_signal_pid;
+extern volatile sig_atomic_t	g_sigint_received;
 
 /* ===================== TOKEN TYPES ===================== */
 # define TOK_CMD 				0
