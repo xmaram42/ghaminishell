@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 14:10:23 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/12/05 17:31:49 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/07 17:06:37 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,51 +59,42 @@ static int	add_env_entry(t_data *data, char *env_str)
 	return (1);
 }
 
-static int	init_shell_env(t_data *data, char **envp)
+static int	init_shell_env_after_copy(t_data *data)
 {
-    int		i;
-    char	*tmp;
-    char	path[PATH_MAX];
+	char	*tmp;
+	char	path[PATH_MAX];
 
-    i = 0;
-    if (envp == NULL || envp[0] == NULL)
-        return (make_env2(data));
-    while (envp[i] != NULL)
-    {
-        if (!add_env_entry(data, envp[i]))
-            return (0);
-        i = i + 1;
-    }
-    if (!find_env_value("OLDPWD", lst_to_arr(data->env)))
-    {
-        tmp = ft_strdup("OLDPWD");
-        if (!tmp || !append_to_list(&data->env, tmp))
-            return (0);
-    }
-    if (!find_env_value("PWD", lst_to_arr(data->env)))
-    {
-        if (getcwd(path, PATH_MAX) == NULL)
-            return (0);
-        tmp = ft_strjoin("PWD=", path);
-        if (!tmp || !append_to_list(&data->env, tmp))
-            return (0);
-    }
-    return (1);
+	if (!find_env_value("OLDPWD", lst_to_arr(data->env)))
+	{
+		tmp = ft_strdup("OLDPWD");
+		if (!tmp || !append_to_list(&data->env, tmp))
+			return (0);
+	}
+	if (!find_env_value("PWD", lst_to_arr(data->env)))
+	{
+		if (getcwd(path, PATH_MAX) == NULL)
+			return (0);
+		tmp = ft_strjoin("PWD=", path);
+		if (!tmp || !append_to_list(&data->env, tmp))
+			return (0);
+	}
+	return (1);
 }
 
-static void	init_data(t_data *data, int argc, char **argv)
+static int	init_shell_env(t_data *data, char **envp)
 {
-	(void)argc;
-	(void)argv;
-	data->env = NULL;
-	data->cmds = NULL;
-	data->token = NULL;
-	data->exit_code = 0;
-	data->pip[0] = -1;
-	data->pip[1] = -1;
-	data->sq = false;
-	data->exit_flag = false;
-	g_signal_pid = 0;
+	int		i;
+
+	i = 0;
+	if (envp == NULL || envp[0] == NULL)
+		return (make_env2(data));
+	while (envp[i] != NULL)
+	{
+		if (!add_env_entry(data, envp[i]))
+			return (0);
+		i = i + 1;
+	}
+	return (init_shell_env_after_copy(data));
 }
 
 int	main(int argc, char **argv, char **envp)

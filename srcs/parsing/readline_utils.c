@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   readline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghsaad <ghsaad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:33:37 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/11/20 13:58:37 by ghsaad           ###   ########.fr       */
+/*   Updated: 2025/12/07 16:53:28 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minishell.h"
 
 #include "minishell.h"
 
@@ -62,10 +60,7 @@ char	*read_full_line(void)
 		return (ft_strdup(""));
 	}
 	if (!line)
-	{
-		ft_putendl_fd("exit", 1);
 		return (NULL);
-	}
 	while (has_unclosed_quote(line))
 		if (!read_continuation(&line))
 			return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:21:22 by ghsaad            #+#    #+#             */
-/*   Updated: 2025/12/05 17:34:49 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/07 17:06:01 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <sys/wait.h>
 # include <limits.h>
 # include <termios.h>
-extern int rl_done;
+
 extern pid_t	g_signal_pid;
 
 /* ===================== TOKEN TYPES ===================== */
@@ -275,6 +275,7 @@ char	**setup_heredoc_env(bool expand, t_data *data);
 int		finish_heredoc(int fd, char *filename);
 
 // Shell execution flow
+void	init_data(t_data *data, int argc, char **argv);
 bool	shell_parse_line(t_data *data, char *line);
 bool	shell_exec(t_data *data);
 int		shell_step(t_data *data);

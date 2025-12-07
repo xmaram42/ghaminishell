@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 12:29:31 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/12/07 16:32:20 by aalbugar         ###   ########.fr       */
+/*   Updated: 2025/12/07 16:53:08 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ char	**create_new_argv(char **old_argv, int argc)
 
 void	pars_word(t_cmd *cmd, t_token *tok, t_data *data)
 {
-    int		argc;
-    char	**new_argv;
-    char	*expanded;
-    char	**env_arr;
+	int		argc;
+	char	**new_argv;
+	char	*expanded;
+	char	**env_arr;
 
 	argc = get_argc(cmd->argv);
 	env_arr = lst_to_arr(data->env);
@@ -50,16 +50,16 @@ void	pars_word(t_cmd *cmd, t_token *tok, t_data *data)
 	free_array(env_arr);
 	if (expanded && expanded[0] == '\0')
 	{
-	    free(expanded);
-	    return ;
+		free(expanded);
+		return ;
 	}
 	new_argv = create_new_argv(cmd->argv, argc);
 	if (!new_argv)
-	    return ;
+		return ;
 	if (expanded)
-	    new_argv[argc] = expanded;
+		new_argv[argc] = expanded;
 	else
-	    new_argv[argc] = ft_strdup(tok->str);
+		new_argv[argc] = ft_strdup(tok->str);
 	new_argv[argc + 1] = NULL;
 	free(cmd->argv);
 	cmd->argv = new_argv;
