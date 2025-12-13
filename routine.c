@@ -14,15 +14,18 @@
 
 static void	eat(t_philo *philo)
 {
-	t_data	*data;
+	 t_data	*data;
 
-	data = philo->data;
-	pthread_mutex_lock(&philo->meal_lock);
-	philo->last_meal = (long long)get_time_ms();
-	philo->meals++;
-	pthread_mutex_unlock(&philo->meal_lock);
-	print_state(philo, EAT);
-	usleep_ms(data->eat, data);
+	 data = philo->data;
+	 pthread_mutex_lock(&philo->meal_lock);
+	 philo->last_meal = (long long)get_time_ms();
+	 pthread_mutex_unlock(&philo->meal_lock);
+	 print_state(philo, EAT);
+	 usleep_ms(data->eat, data);
+	 pthread_mutex_lock(&philo->meal_lock);
+	 philo->last_meal = (long long)get_time_ms();
+	 philo->meals++;
+	 pthread_mutex_unlock(&philo->meal_lock);
 }
 
 static void	sleep_philo(t_philo *philo)
