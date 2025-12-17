@@ -12,6 +12,29 @@
 
 #include "cub3d.h"
 
+char *extract_texture_path(char *value)
+{
+    int i;
+    int start;
+    int end;
+    char *path;
+
+    i = 0;
+    while (value[i] == ' ')
+        i++;
+    start = i;
+    while (value[i] && value[i] != ' ' && value[i] != '\n')
+        i++;
+    end = i;
+    path = malloc(sizeof(char) * (end - start + 1));
+    if (!path)
+        return (NULL);
+    i = 0;
+    while (start < end)
+        path[i++] = value[start++];
+    path[i] = '\0';
+    return (path);
+}
 
 int parse_rgb_number(char *s, int *i, int *value)
 {

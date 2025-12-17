@@ -118,6 +118,7 @@ int get_element_type(char *line, int i);
 int process_line(char *line, t_parse *parser);
 
 // elements_utils1
+char *extract_texture_path(char *value);
 int parse_rgb_number(char *s, int *i, int *value);
 int parse_color(char *value, int *out_color);
 

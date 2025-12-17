@@ -6,7 +6,7 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:33:26 by maabdulr          #+#    #+#             */
-/*   Updated: 2025/12/17 16:46:21 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:27:49 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int parse_texture(char *value)
 {
     int i;
     int start;
+    int end;
     int fd;
+    char temp;
 
     i = 0;
     while (value[i] == ' ')
@@ -47,7 +49,9 @@ int parse_texture(char *value)
     while (value[i] && value[i] != ' ' && value[i] != '\n')
         i++;
 
-    if (i - start < 5 || ft_strncmp(value + i - 4, ".xpm", 4) != 0)
+    end = i;
+
+    if (end - start < 5 || ft_strncmp(value + end - 4, ".xpm", 4) != 0)
         return (error_msg("Texture must be a .xpm file"));
 
     while (value[i] == ' ')
@@ -56,7 +60,11 @@ int parse_texture(char *value)
     if (value[i] != '\0' && value[i] != '\n')
         return (error_msg("Invalid texture path"));
 
+    temp = value[end];
+    value[end] = '\0';
     fd = open(value + start, O_RDONLY);
+    value[end] = temp;
+    
     if (fd < 0)
         return (error_msg("Cannot open texture file"));
 
@@ -114,34 +122,34 @@ int process_line(char *line, t_parse *parser)
     if (type == -1)
         return (2);
     if (process_element(type, &parser->el))
-        return (1);
+        return (error_msg("Error processing element"));
     if (type == EL_NO)
     {
         value = line + i + 3;
         if (parse_texture(value))
             return (1);
-        parser->tex_no = ft_strdup(value);
+        parser->tex_no = extract_texture_path(value);
     }
     else if (type == EL_SO)
     {
         value = line + i + 3;
         if (parse_texture(value))
             return (1);
-        parser->tex_so = ft_strdup(value);
+        parser->tex_so = extract_texture_path(value);
     }
     else if (type == EL_WE)
     {
         value = line + i + 3;
         if (parse_texture(value))
             return (1);
-        parser->tex_we = ft_strdup(value);
+        parser->tex_we = extract_texture_path(value);
     }
     else if (type == EL_EA)
     {
         value = line + i + 3;
         if (parse_texture(value))
             return (1);
-        parser->tex_ea = ft_strdup(value);
+        parser->tex_ea = extract_texture_path(value);
     }
     else if (type == EL_F)
     {

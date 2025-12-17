@@ -41,7 +41,7 @@ int parse(char *av, t_parse *parser)
         close(fd);
         return (1);
     } 
-    if(parse_map(&av[1], parser) == 1)
+    if(parse_map(av, parser) == 1)
     {
         close(fd);
         return (1);

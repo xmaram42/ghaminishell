@@ -1,9 +1,9 @@
 NO               tex/Bark.xpm          
-SO      tex/Stone.xpm
-EA      tex/TreeRings.xpm
+SO tex/Stone.xpm
+EA tex/TreeRings.xpm
 
 
-WE      tex/Grass.xpm                     
+WO    tex/Grass.xpm              
  
   
    
@@ -14,10 +14,10 @@ WE      tex/Grass.xpm
        
         
          
-          
 
 
-F 220,100,100
+
+F 220,100,0
 
 
 

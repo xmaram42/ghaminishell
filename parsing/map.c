@@ -24,11 +24,15 @@ int line_len(char *line)
 char *skip_to_map(int fd)
 {
     char *line;
+    int i;
 
     line = get_next_line(fd);
     while (line)
     {
-        if (line[0] == '1' || line[0] == ' ')
+        i = 0;
+        while (line[i] == ' ' || line[i] == '\t')
+            i++;
+        if (line[i] == '1')
             return (line);
         free(line);
         line = get_next_line(fd);
