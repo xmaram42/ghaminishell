@@ -1,43 +1,74 @@
-NAME        = philo
+NAME            := cub3D
+CC              := cc
+CFLAGS          := -Wall -Wextra -Werror
 
-SRC         = main.c \
-			  init.c \
-			  monitor.c\
-			  philo.c \
-			  parse.c \
-			  utils.c \
-			  routine.c \
-			  fork.c\
-			  time.c\
-			  cleanup.c\
+# ======================
+# MiniLibX
+# ======================
+MLX_DIR         := mlx
+MLX_LIB         := $(MLX_DIR)/libmlx.a
+MLX_LDFLAGS     := -Lmlx -lmlx -framework OpenGL -framework AppKit
 
+# ======================
+# get_next_line
+# ======================
+GNL_DIR         := get_next_line
+GNL_SRCS        := $(GNL_DIR)/get_next_line.c \
+                   $(GNL_DIR)/get_next_line_utils.c\
 
-OBJ         = $(SRC:.c=.o)
+# ======================
+# Libft
+# ======================
+LIBFT_DIR       := libft
+LIBFT           := $(LIBFT_DIR)/libft.a
 
-CC          = cc
-FLAGS       = -Wall -Wextra -Werror -pthread
-DEL         = rm -rf
+# ======================
+# Sources
+# ======================
+SRCS            := main.c helper.c \
+					parsing/parse.c \
+					parsing/elements.c \
+					parsing/elements_utils.c \
+					parsing/elements_utils1.c \
+					parsing/map.c \
+					parsing/validate_map.c \
+					execution/init_game.c \
+					execution/init_player.c \
+					execution/render.c \
+                   $(GNL_SRCS)
 
+OBJS            := $(SRCS:.c=.o)
 
-BLUE = \033[0;34m]
+# ======================
+# Include paths
+# ======================
+INC             := -I. -Ilibft -Iget_next_line -Imlx
 
-
+# ======================
+# Rules
+# ======================
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ)
- 
+$(NAME): $(MLX_LIB) $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_LDFLAGS) -o $(NAME)
+
 %.o: %.c
-	@echo "$(BLUE)Compiling $<..."
-	@$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
+
+$(MLX_LIB):
+	$(MAKE) -C $(MLX_DIR)
 
 clean:
-	@echo "$(BLUE)Cleaning object files..."
-	@$(DEL) $(OBJ)
+	rm -f $(OBJS)
+	$(MAKE) -C $(MLX_DIR) clean
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	@echo "$(BLUE)Cleaning executable..."
-	@$(DEL) $(NAME)
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

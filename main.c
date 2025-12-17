@@ -3,28 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbugar <aalbugar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/10 13:44:34 by aalbugar          #+#    #+#             */
-/*   Updated: 2025/12/11 11:41:03 by aalbugar         ###   ########.fr       */
+/*   Created: 2025/12/15 11:48:25 by maabdulr          #+#    #+#             */
+/*   Updated: 2025/12/17 15:24:57 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "cub3d.h"
 
-int main (int argc, char **argv)
+int main(int ac, char **av)
 {
-	t_data		data;
-
-	if (!validate_args(argc, argv)|| !parse_args(&data, argc, argv))
-		return (1);
-	if (!init_data(&data))
-		return (1);
-	if (!start_philo(&data))
-	{
-		cleanup(&data);
-		return (1);
-	}
-	cleanup(&data);
-	return (0);
+    t_parse     parser;
+    t_game      game;
+    
+    if (check_args(ac, av) == 1)
+        return (1);
+    if (parse(av[1], &parser))
+        return (1);
+    if(init_game(&game, &parser))
+        return (1);
+    if (init_mlx(&game))
+        return (1);
+    if (draw_floor_ceiling(&game))
+        return (1);
+    mlx_loop(game.mlx);
+    return (0);
 }
