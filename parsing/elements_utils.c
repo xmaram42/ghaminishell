@@ -6,7 +6,7 @@
 /*   By: maabdulr <maabdulr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:33:26 by maabdulr          #+#    #+#             */
-/*   Updated: 2025/12/17 17:27:49 by maabdulr         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:27:52 by maabdulr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,21 +114,38 @@ int process_line(char *line, t_parse *parser)
     int i;
     int type;
     char *value;
+    int j;
 
     i = 0;
     while (line[i] == ' ')
         i++;
+    /* forbid tabs in element definitions */
+    j = i;
+    while (line[j] && line[j] != '\n')
+    {
+        if (line[j] == '\t')
+            return (error_msg("Invalid element Tab character"));
+        j++;
+    }
     type = get_element_type(line, i);
     if (type == -1)
+    {
+        /* If line appears to start an element but is malformed, use one message */
+        if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' ||
+            line[i] == 'E' || line[i] == 'F' || line[i] == 'C')
+            return (error_msg("Invalid element definition"));
         return (2);
+    }
     if (process_element(type, &parser->el))
-        return (error_msg("Error processing element"));
+        return (1);
     if (type == EL_NO)
     {
         value = line + i + 3;
         if (parse_texture(value))
             return (1);
         parser->tex_no = extract_texture_path(value);
+        if (!parser->tex_no)
+            return (error_msg("Memory allocation failed"));
     }
     else if (type == EL_SO)
     {
@@ -136,6 +153,8 @@ int process_line(char *line, t_parse *parser)
         if (parse_texture(value))
             return (1);
         parser->tex_so = extract_texture_path(value);
+        if (!parser->tex_so)
+            return (error_msg("Memory allocation failed"));
     }
     else if (type == EL_WE)
     {
@@ -143,6 +162,8 @@ int process_line(char *line, t_parse *parser)
         if (parse_texture(value))
             return (1);
         parser->tex_we = extract_texture_path(value);
+        if (!parser->tex_we)
+            return (error_msg("Memory allocation failed"));
     }
     else if (type == EL_EA)
     {
@@ -150,6 +171,8 @@ int process_line(char *line, t_parse *parser)
         if (parse_texture(value))
             return (1);
         parser->tex_ea = extract_texture_path(value);
+        if (!parser->tex_ea)
+            return (error_msg("Memory allocation failed"));
     }
     else if (type == EL_F)
     {

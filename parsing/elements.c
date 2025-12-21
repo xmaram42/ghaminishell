@@ -87,6 +87,9 @@ int parse_elements(int fd, t_parse *parser)
         free(line);
         line = get_next_line(fd);
     }
+    /* If EOF reached without a non-element line, ensure all elements exist */
+    if (!all_elements_present(&parser->el))
+        return (free_textures(parser));
     return (0);
 }
 

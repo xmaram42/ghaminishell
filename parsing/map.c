@@ -49,6 +49,8 @@ int count_map(int fd, t_parse *parser)
     parser->map.w = 0;
 
     line = skip_to_map(fd);
+    if (!line)
+        return (error_msg("No map found in file"));
     while (line)
     {
         parser->map.h++;
@@ -72,9 +74,14 @@ int store_map(int fd, t_parse *parser)
 
     i = 0;
     line = skip_to_map(fd);
+    if (!line)
+    {
+        free(parser->map.map);
+        return (error_msg("No map found in file"));
+    }
     while (line)
     {
-        parser->map.map[i++] = line; // store as-is
+        parser->map.map[i++] = line;
         line = get_next_line(fd);
     }
     parser->map.map[i] = NULL;

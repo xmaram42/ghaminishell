@@ -12,21 +12,27 @@
 
 #include "cub3d.h"
 
-
 int check_args(int ac, char **av)
 {
+    int len;
+
     if (ac != 2)
-   {
-    printf("Error\nWrite *.cub file only\n");
-    return (1);
-   }
-   
-   if (ft_strncmp(av[1] + (ft_strlen(av[1]) - 4), ".cub", 4) != 0)
-   {
-    printf("Error\nWrite *.cub file only\n");
-    return (1);
-   }
-   return (0);
+    {
+        printf("Error\nWrite *.cub file only\n");
+        return (1);
+    }
+    len = ft_strlen(av[1]);
+    if (len < 5)
+    {
+        printf("Error\nFilename too short (minimum: x.cub)\n");
+        return (1);
+    }
+    if (ft_strncmp(av[1] + (len - 4), ".cub", 4) != 0)
+    {
+        printf("Error\nWrite *.cub file only\n");
+        return (1);
+    }
+    return (0);
 }
 
 int parse(char *av, t_parse *parser)
@@ -40,12 +46,13 @@ int parse(char *av, t_parse *parser)
     {
         close(fd);
         return (1);
-    } 
+    }
+    close(fd);  // Close after parsing elements
+    
+    // parse_map opens its own file descriptors
     if(parse_map(av, parser) == 1)
     {
-        close(fd);
         return (1);
     }
-    close(fd);
     return (0);
 }

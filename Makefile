@@ -3,18 +3,42 @@ CC              := cc
 CFLAGS          := -Wall -Wextra -Werror
 
 # ======================
-# MiniLibX
+# OS Detection
 # ======================
-MLX_DIR         := mlx
-MLX_LIB         := $(MLX_DIR)/libmlx.a
-MLX_LDFLAGS     := -Lmlx -lmlx -framework OpenGL -framework AppKit
+UNAME_S         := $(shell uname -s)
+
+# ======================
+# MiniLibX Configuration (Auto-detect)
+# ======================
+ifeq ($(UNAME_S),Linux)
+	# Linux configuration
+	MLX_DIR     := mlx_linux
+	MLX_LIB     := $(MLX_DIR)/libmlx.a
+	MLX_LDFLAGS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
+	MLX_BUILD   := $(MAKE) -C $(MLX_DIR)
+	PLATFORM    := Linux
+else ifeq ($(UNAME_S),Darwin)
+	# macOS configuration
+	MLX_DIR     := mlx_mac
+	MLX_LIB     := $(MLX_DIR)/libmlx.a
+	MLX_LDFLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+	MLX_BUILD   := $(MAKE) -C $(MLX_DIR)
+	PLATFORM    := macOS
+else
+	# Fallback to Linux
+	MLX_DIR     := mlx_linux
+	MLX_LIB     := $(MLX_DIR)/libmlx.a
+	MLX_LDFLAGS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
+	MLX_BUILD   := $(MAKE) -C $(MLX_DIR)
+	PLATFORM    := Unknown (defaulting to Linux)
+endif
 
 # ======================
 # get_next_line
 # ======================
 GNL_DIR         := get_next_line
 GNL_SRCS        := $(GNL_DIR)/get_next_line.c \
-                   $(GNL_DIR)/get_next_line_utils.c\
+                   $(GNL_DIR)/get_next_line_utils.c
 
 # ======================
 # Libft
@@ -35,6 +59,7 @@ SRCS            := main.c helper.c \
 					execution/init_game.c \
 					execution/init_player.c \
 					execution/render.c \
+					execution/controls.c \
                    $(GNL_SRCS)
 
 OBJS            := $(SRCS:.c=.o)
@@ -42,34 +67,48 @@ OBJS            := $(SRCS:.c=.o)
 # ======================
 # Include paths
 # ======================
-INC             := -I. -Ilibft -Iget_next_line -Imlx
+INC             := -I. -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(MLX_DIR)
 
 # ======================
 # Rules
 # ======================
-all: $(NAME)
+all: banner $(NAME)
+
+banner:
+	@echo "=========================================="
+	@echo "  Building Cub3D for $(PLATFORM)"
+	@echo "=========================================="
 
 $(NAME): $(MLX_LIB) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_LDFLAGS) -o $(NAME)
+	@echo "Linking $(NAME)..."
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_LDFLAGS) -o $(NAME)
+	@echo "✓ Build complete for $(PLATFORM)!"
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@echo "Building libft..."
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 
 $(MLX_LIB):
-	$(MAKE) -C $(MLX_DIR)
+	@echo "Building MiniLibX for $(PLATFORM)..."
+	@$(MLX_BUILD) --no-print-directory
 
 clean:
-	rm -f $(OBJS)
-	$(MAKE) -C $(MLX_DIR) clean
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@echo "Cleaning object files..."
+	@rm -f $(OBJS)
+	@$(MAKE) -C $(MLX_DIR) clean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
+	@echo "✓ Clean complete"
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@echo "Removing $(NAME)..."
+	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
+	@echo "✓ Full clean complete"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re banner
